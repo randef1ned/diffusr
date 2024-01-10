@@ -20,14 +20,7 @@
  * along with diffusr. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-// [[Rcpp::depends(RcppEigen)]]
-#include <RcppEigen.h>
-// [[Rcpp::plugins(cpp11)]]
-#include <cmath>
-#include <vector>
-#include <algorithm>
-
+#include "../inst/include/diffusr.h"
 
 //' Column normalize a matrix, so that it is stochastic.
 //'
@@ -36,12 +29,13 @@
 //' @return  returns the normalized matrix
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-Eigen::MatrixXd stoch_col_norm_(const Eigen::MatrixXd& W)
+MatrixXd stoch_col_norm_(const MatrixXd& W)
 {
-    Eigen::MatrixXd res(W.rows(), W.cols());
-    Eigen::VectorXd colsums      = W.colwise().sum();
+    MatrixXd res(W.rows(), W.cols());
+    VectorXd colsums      = W.colwise().sum();
     const double    empt_col_val = 1.0 / W.cols();
     const double    zero_col     = 0.00001;
+    #pragma omp parallel for
     for (unsigned int i = 0; i < W.cols(); ++i)
     {
         if ((W.col(i)).sum() <= zero_col)
@@ -53,7 +47,6 @@ Eigen::MatrixXd stoch_col_norm_(const Eigen::MatrixXd& W)
     return res;
 }
 
-
 //' Calculate the Laplacian of a weighted matrix.
 //'
 //' @noRd
@@ -61,14 +54,17 @@ Eigen::MatrixXd stoch_col_norm_(const Eigen::MatrixXd& W)
 //' @return  returns the Laplacian of a matrix
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-Eigen::MatrixXd laplacian_(const Eigen::MatrixXd& W)
+MatrixXd laplacian_(const MatrixXd& W)
 {
     const int       P = W.rows();
-    Eigen::MatrixXd res(W.rows(), W.cols());
-    Eigen::VectorXd rowsums = W.rowwise().sum();
+    MatrixXd res(W.rows(), W.cols());
+    VectorXd rowsums = W.rowwise().sum();
     for (int i = 0; i < P; ++i)
     {
-        Rcpp::checkUserInterrupt();
+        if (i % 25) {
+            Rcpp::checkUserInterrupt();
+        }
+        #pragma omp parallel for
         for (int j = 0; j < P; ++j)
         {
             if (i == j && rowsums[i] != 0)
@@ -95,9 +91,10 @@ double identity_(double d)
 //' @return  returns the node degrees as vectors.
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-std::vector<double> node_degrees_(const Eigen::MatrixXd& W)
+vector<double> node_degrees_(const MatrixXd& W)
 {
-    std::vector<double> node_degrees(W.rows());
+    vector<double> node_degrees(W.rows());
+    #pragma omp parallel for
     for (unsigned int i = 0; i < W.rows(); ++i)
     {
       node_degrees[i] = 0;
@@ -118,12 +115,12 @@ std::vector<double> node_degrees_(const Eigen::MatrixXd& W)
 //' @return  returns the hub corrected matrix
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-Eigen::MatrixXd hub_normalize_(const Eigen::MatrixXd& W)
+MatrixXd hub_normalize_(const MatrixXd& W)
 {
     auto &fc(identity_);
-    Eigen::MatrixXd res = Eigen::MatrixXd::Constant(W.rows(), W.cols(), 0.0);
-    std::vector<double> node_degrees = node_degrees_(W);
-
+    MatrixXd res = MatrixXd::Constant(W.rows(), W.cols(), 0.0);
+    vector<double> node_degrees = node_degrees_(W);
+    #pragma omp parallel for
     for (unsigned int i = 0; i < W.rows(); ++i)
     {
       for (unsigned int j = 0; j < W.cols(); ++j)
@@ -131,7 +128,7 @@ Eigen::MatrixXd hub_normalize_(const Eigen::MatrixXd& W)
           if (W(i, j) != 0)
           {
               double mh = fc(node_degrees[i] / node_degrees[j]);
-              res(i, j) = std::min(1.0, mh) / node_degrees[i];
+              res(i, j) = min(1.0, mh) / node_degrees[i];
           }
       }
     }

@@ -17,21 +17,19 @@
 # You should have received a copy of the GNU General Public License
 # along with diffusr. If not, see <http://www.gnu.org/licenses/>.
 
-context("heat diffusion")
-
 h <- c(1, rep(0, 4))
 adja <- matrix(1, 5, 5)
 diag(adja) <- 0
 
 test_that("heat diffusion with zero diffusion",{
   s <- heat.diffusion(h, adja, 0)
-  expect_equal(as.vector(s), h, 0.001)
+  expect_equal(as.vector(s), h, tolerance = 0.001)
 })
 
 test_that("heat diffusion if maximum diffusion",{
   expect <- rep(0.2,  5)
   s <- heat.diffusion(h, adja, 10000000)
-  expect_equal(as.vector(s), expect, 0.001)
+  expect_equal(as.vector(s), expect, tolerance = 0.001)
 })
 
 test_that("heat diffusion matrix if maximum diffusion",  {
@@ -39,7 +37,7 @@ test_that("heat diffusion matrix if maximum diffusion",  {
   p0[1,] <- 1
   expect <- matrix(1/5, nrow=5, ncol=10)
   mat.heat <- heat.diffusion(p0, adja, 1000000)
-  expect_equal(mat.heat, expect, 0.0001)
+  expect_equal(mat.heat, expect, tolerance = 0.0001)
 })
 
 test_that("heat diffusion vectorial is same as with matrix",  {
@@ -49,7 +47,7 @@ test_that("heat diffusion vectorial is same as with matrix",  {
       p <- heat.diffusion(p0[, e], adja, .5)
       p
   })
-  expect_equal(mat.heat, vec.heat, 0.0001)
+  expect_equal(mat.heat, vec.heat, tolerance = 0.0001)
 })
 
 test_that("wrong t negative values", {

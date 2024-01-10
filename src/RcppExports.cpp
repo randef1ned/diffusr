@@ -9,13 +9,18 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // heat_diffusion_
-Eigen::MatrixXd heat_diffusion_(const Eigen::MatrixXd& v0, const Eigen::MatrixXd& W, const double t);
+MatrixXd heat_diffusion_(const MatrixXd& v0, const MatrixXd& W, const double t);
 static SEXP _diffusr_heat_diffusion__try(SEXP v0SEXP, SEXP WSEXP, SEXP tSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type v0(v0SEXP);
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const MatrixXd& >::type v0(v0SEXP);
+    Rcpp::traits::input_parameter< const MatrixXd& >::type W(WSEXP);
     Rcpp::traits::input_parameter< const double >::type t(tSEXP);
     rcpp_result_gen = Rcpp::wrap(heat_diffusion_(v0, W, t));
     return rcpp_result_gen;
@@ -32,21 +37,25 @@ RcppExport SEXP _diffusr_heat_diffusion_(SEXP v0SEXP, SEXP WSEXP, SEXP tSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
 }
 // stoch_col_norm_
-Eigen::MatrixXd stoch_col_norm_(const Eigen::MatrixXd& W);
+MatrixXd stoch_col_norm_(const MatrixXd& W);
 static SEXP _diffusr_stoch_col_norm__try(SEXP WSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const MatrixXd& >::type W(WSEXP);
     rcpp_result_gen = Rcpp::wrap(stoch_col_norm_(W));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
@@ -62,21 +71,25 @@ RcppExport SEXP _diffusr_stoch_col_norm_(SEXP WSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
 }
 // laplacian_
-Eigen::MatrixXd laplacian_(const Eigen::MatrixXd& W);
+MatrixXd laplacian_(const MatrixXd& W);
 static SEXP _diffusr_laplacian__try(SEXP WSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const MatrixXd& >::type W(WSEXP);
     rcpp_result_gen = Rcpp::wrap(laplacian_(W));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
@@ -92,21 +105,25 @@ RcppExport SEXP _diffusr_laplacian_(SEXP WSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
 }
 // node_degrees_
-std::vector<double> node_degrees_(const Eigen::MatrixXd& W);
+vector<double> node_degrees_(const MatrixXd& W);
 static SEXP _diffusr_node_degrees__try(SEXP WSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const MatrixXd& >::type W(WSEXP);
     rcpp_result_gen = Rcpp::wrap(node_degrees_(W));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
@@ -122,21 +139,25 @@ RcppExport SEXP _diffusr_node_degrees_(SEXP WSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
 }
 // hub_normalize_
-Eigen::MatrixXd hub_normalize_(const Eigen::MatrixXd& W);
+MatrixXd hub_normalize_(const MatrixXd& W);
 static SEXP _diffusr_hub_normalize__try(SEXP WSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const MatrixXd& >::type W(WSEXP);
     rcpp_result_gen = Rcpp::wrap(hub_normalize_(W));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
@@ -152,22 +173,26 @@ RcppExport SEXP _diffusr_hub_normalize_(SEXP WSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
 }
 // mrwr_
-Eigen::MatrixXd mrwr_(const Eigen::MatrixXd& p0, const Eigen::MatrixXd& W, const double r, const double thresh, const int niter, const bool do_analytical);
+VectorXd mrwr_(const MatrixXd& p0, const MatrixXd& W, const double r, const double thresh, const int niter, const bool do_analytical);
 static SEXP _diffusr_mrwr__try(SEXP p0SEXP, SEXP WSEXP, SEXP rSEXP, SEXP threshSEXP, SEXP niterSEXP, SEXP do_analyticalSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type p0(p0SEXP);
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const MatrixXd& >::type p0(p0SEXP);
+    Rcpp::traits::input_parameter< const MatrixXd& >::type W(WSEXP);
     Rcpp::traits::input_parameter< const double >::type r(rSEXP);
     Rcpp::traits::input_parameter< const double >::type thresh(threshSEXP);
     Rcpp::traits::input_parameter< const int >::type niter(niterSEXP);
@@ -187,22 +212,26 @@ RcppExport SEXP _diffusr_mrwr_(SEXP p0SEXP, SEXP WSEXP, SEXP rSEXP, SEXP threshS
         UNPROTECT(1);
         Rf_onintr();
     }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
 }
 // neighbors_
-Rcpp::List neighbors_(const Rcpp::IntegerVector& node_idxs, const Rcpp::NumericMatrix& W, const int k);
+List neighbors_(const vector<int>& node_idxs, const NumericMatrix& W, const int k);
 static SEXP _diffusr_neighbors__try(SEXP node_idxsSEXP, SEXP WSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type node_idxs(node_idxsSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const vector<int>& >::type node_idxs(node_idxsSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type W(WSEXP);
     Rcpp::traits::input_parameter< const int >::type k(kSEXP);
     rcpp_result_gen = Rcpp::wrap(neighbors_(node_idxs, W, k));
     return rcpp_result_gen;
@@ -219,11 +248,15 @@ RcppExport SEXP _diffusr_neighbors_(SEXP node_idxsSEXP, SEXP WSEXP, SEXP kSEXP) 
         UNPROTECT(1);
         Rf_onintr();
     }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -233,13 +266,13 @@ RcppExport SEXP _diffusr_neighbors_(SEXP node_idxsSEXP, SEXP WSEXP, SEXP kSEXP) 
 static int _diffusr_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("Eigen::MatrixXd(*heat_diffusion_)(const Eigen::MatrixXd&,const Eigen::MatrixXd&,const double)");
-        signatures.insert("Eigen::MatrixXd(*stoch_col_norm_)(const Eigen::MatrixXd&)");
-        signatures.insert("Eigen::MatrixXd(*laplacian_)(const Eigen::MatrixXd&)");
-        signatures.insert("std::vector<double>(*node_degrees_)(const Eigen::MatrixXd&)");
-        signatures.insert("Eigen::MatrixXd(*hub_normalize_)(const Eigen::MatrixXd&)");
-        signatures.insert("Eigen::MatrixXd(*mrwr_)(const Eigen::MatrixXd&,const Eigen::MatrixXd&,const double,const double,const int,const bool)");
-        signatures.insert("Rcpp::List(*neighbors_)(const Rcpp::IntegerVector&,const Rcpp::NumericMatrix&,const int)");
+        signatures.insert("MatrixXd(*heat_diffusion_)(const MatrixXd&,const MatrixXd&,const double)");
+        signatures.insert("MatrixXd(*stoch_col_norm_)(const MatrixXd&)");
+        signatures.insert("MatrixXd(*laplacian_)(const MatrixXd&)");
+        signatures.insert("vector<double>(*node_degrees_)(const MatrixXd&)");
+        signatures.insert("MatrixXd(*hub_normalize_)(const MatrixXd&)");
+        signatures.insert("VectorXd(*mrwr_)(const MatrixXd&,const MatrixXd&,const double,const double,const int,const bool)");
+        signatures.insert("List(*neighbors_)(const vector<int>&,const NumericMatrix&,const int)");
     }
     return signatures.find(sig) != signatures.end();
 }

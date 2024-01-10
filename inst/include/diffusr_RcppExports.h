@@ -25,11 +25,11 @@ namespace diffusr {
         }
     }
 
-    inline Eigen::MatrixXd heat_diffusion_(const Eigen::MatrixXd& v0, const Eigen::MatrixXd& W, const double t) {
+    inline MatrixXd heat_diffusion_(const MatrixXd& v0, const MatrixXd& W, const double t) {
         typedef SEXP(*Ptr_heat_diffusion_)(SEXP,SEXP,SEXP);
         static Ptr_heat_diffusion_ p_heat_diffusion_ = NULL;
         if (p_heat_diffusion_ == NULL) {
-            validateSignature("Eigen::MatrixXd(*heat_diffusion_)(const Eigen::MatrixXd&,const Eigen::MatrixXd&,const double)");
+            validateSignature("MatrixXd(*heat_diffusion_)(const MatrixXd&,const MatrixXd&,const double)");
             p_heat_diffusion_ = (Ptr_heat_diffusion_)R_GetCCallable("diffusr", "_diffusr_heat_diffusion_");
         }
         RObject rcpp_result_gen;
@@ -39,16 +39,18 @@ namespace diffusr {
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Eigen::MatrixXd >(rcpp_result_gen);
+        return Rcpp::as<MatrixXd >(rcpp_result_gen);
     }
 
-    inline Eigen::MatrixXd stoch_col_norm_(const Eigen::MatrixXd& W) {
+    inline MatrixXd stoch_col_norm_(const MatrixXd& W) {
         typedef SEXP(*Ptr_stoch_col_norm_)(SEXP);
         static Ptr_stoch_col_norm_ p_stoch_col_norm_ = NULL;
         if (p_stoch_col_norm_ == NULL) {
-            validateSignature("Eigen::MatrixXd(*stoch_col_norm_)(const Eigen::MatrixXd&)");
+            validateSignature("MatrixXd(*stoch_col_norm_)(const MatrixXd&)");
             p_stoch_col_norm_ = (Ptr_stoch_col_norm_)R_GetCCallable("diffusr", "_diffusr_stoch_col_norm_");
         }
         RObject rcpp_result_gen;
@@ -58,16 +60,18 @@ namespace diffusr {
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Eigen::MatrixXd >(rcpp_result_gen);
+        return Rcpp::as<MatrixXd >(rcpp_result_gen);
     }
 
-    inline Eigen::MatrixXd laplacian_(const Eigen::MatrixXd& W) {
+    inline MatrixXd laplacian_(const MatrixXd& W) {
         typedef SEXP(*Ptr_laplacian_)(SEXP);
         static Ptr_laplacian_ p_laplacian_ = NULL;
         if (p_laplacian_ == NULL) {
-            validateSignature("Eigen::MatrixXd(*laplacian_)(const Eigen::MatrixXd&)");
+            validateSignature("MatrixXd(*laplacian_)(const MatrixXd&)");
             p_laplacian_ = (Ptr_laplacian_)R_GetCCallable("diffusr", "_diffusr_laplacian_");
         }
         RObject rcpp_result_gen;
@@ -77,16 +81,18 @@ namespace diffusr {
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Eigen::MatrixXd >(rcpp_result_gen);
+        return Rcpp::as<MatrixXd >(rcpp_result_gen);
     }
 
-    inline std::vector<double> node_degrees_(const Eigen::MatrixXd& W) {
+    inline vector<double> node_degrees_(const MatrixXd& W) {
         typedef SEXP(*Ptr_node_degrees_)(SEXP);
         static Ptr_node_degrees_ p_node_degrees_ = NULL;
         if (p_node_degrees_ == NULL) {
-            validateSignature("std::vector<double>(*node_degrees_)(const Eigen::MatrixXd&)");
+            validateSignature("vector<double>(*node_degrees_)(const MatrixXd&)");
             p_node_degrees_ = (Ptr_node_degrees_)R_GetCCallable("diffusr", "_diffusr_node_degrees_");
         }
         RObject rcpp_result_gen;
@@ -96,16 +102,18 @@ namespace diffusr {
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+        return Rcpp::as<vector<double> >(rcpp_result_gen);
     }
 
-    inline Eigen::MatrixXd hub_normalize_(const Eigen::MatrixXd& W) {
+    inline MatrixXd hub_normalize_(const MatrixXd& W) {
         typedef SEXP(*Ptr_hub_normalize_)(SEXP);
         static Ptr_hub_normalize_ p_hub_normalize_ = NULL;
         if (p_hub_normalize_ == NULL) {
-            validateSignature("Eigen::MatrixXd(*hub_normalize_)(const Eigen::MatrixXd&)");
+            validateSignature("MatrixXd(*hub_normalize_)(const MatrixXd&)");
             p_hub_normalize_ = (Ptr_hub_normalize_)R_GetCCallable("diffusr", "_diffusr_hub_normalize_");
         }
         RObject rcpp_result_gen;
@@ -115,16 +123,18 @@ namespace diffusr {
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Eigen::MatrixXd >(rcpp_result_gen);
+        return Rcpp::as<MatrixXd >(rcpp_result_gen);
     }
 
-    inline Eigen::MatrixXd mrwr_(const Eigen::MatrixXd& p0, const Eigen::MatrixXd& W, const double r, const double thresh, const int niter, const bool do_analytical) {
+    inline VectorXd mrwr_(const MatrixXd& p0, const MatrixXd& W, const double r, const double thresh, const int niter, const bool do_analytical) {
         typedef SEXP(*Ptr_mrwr_)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_mrwr_ p_mrwr_ = NULL;
         if (p_mrwr_ == NULL) {
-            validateSignature("Eigen::MatrixXd(*mrwr_)(const Eigen::MatrixXd&,const Eigen::MatrixXd&,const double,const double,const int,const bool)");
+            validateSignature("VectorXd(*mrwr_)(const MatrixXd&,const MatrixXd&,const double,const double,const int,const bool)");
             p_mrwr_ = (Ptr_mrwr_)R_GetCCallable("diffusr", "_diffusr_mrwr_");
         }
         RObject rcpp_result_gen;
@@ -134,16 +144,18 @@ namespace diffusr {
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Eigen::MatrixXd >(rcpp_result_gen);
+        return Rcpp::as<VectorXd >(rcpp_result_gen);
     }
 
-    inline Rcpp::List neighbors_(const Rcpp::IntegerVector& node_idxs, const Rcpp::NumericMatrix& W, const int k) {
+    inline List neighbors_(const vector<int>& node_idxs, const NumericMatrix& W, const int k) {
         typedef SEXP(*Ptr_neighbors_)(SEXP,SEXP,SEXP);
         static Ptr_neighbors_ p_neighbors_ = NULL;
         if (p_neighbors_ == NULL) {
-            validateSignature("Rcpp::List(*neighbors_)(const Rcpp::IntegerVector&,const Rcpp::NumericMatrix&,const int)");
+            validateSignature("List(*neighbors_)(const vector<int>&,const NumericMatrix&,const int)");
             p_neighbors_ = (Ptr_neighbors_)R_GetCCallable("diffusr", "_diffusr_neighbors_");
         }
         RObject rcpp_result_gen;
@@ -153,9 +165,11 @@ namespace diffusr {
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::List >(rcpp_result_gen);
+        return Rcpp::as<List >(rcpp_result_gen);
     }
 
 }

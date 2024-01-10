@@ -25,8 +25,6 @@
 #'heat streams from the starting nodes into surrounding nodes.
 #'
 #' @export
-#' @docType methods
-#' @rdname heat-diffusion-methods
 #'
 #' @param h0   an \code{n x p}-dimensional numeric non-negative vector/matrix
 #'  of starting temperatures
@@ -35,6 +33,11 @@
 #' @param t  time point when heat is measured
 #' @param ...  additional parameters
 #' @return  returns the heat on every node as numeric vector
+#'
+#' @useDynLib diffusr
+#'
+#' @importFrom checkmate assert_int assert_integer assert test_matrix test_numeric test_atomic_vector
+#' @importFrom Rcpp sourceCpp
 #'
 #' @references
 #' \url{https://en.wikipedia.org/wiki/Laplacian_matrix} \cr
@@ -49,45 +52,35 @@
 #' graph <- matrix(abs(rnorm(n*n)), n, n)
 #' # computation of stationary distribution
 #' ht <- heat.diffusion(h0, graph)
-setGeneric(
-  "heat.diffusion",
-  function(h0, graph, t=.5, ...)
-  {
-    standardGeneric("heat.diffusion")
-  },
-  package="diffusr"
-)
+heat.diffusion <- function(h0, graph, t = 0.5, ...) {
+  assert_number(t, lower = 0, na.ok = FALSE, finite = TRUE, null.ok = FALSE)
+  n_elements <- nrow(graph)
 
-#' @rdname heat-diffusion-methods
-#' @aliases heat.diffusion,numeric,matrix-method
-setMethod(
-  "heat.diffusion",
-  signature = signature(h0="numeric", graph="matrix"),
-  function(h0, graph, t=.5, ...)
-  {
-    h0 <- as.matrix(h0, ncol=1)
-    heat.diffusion(h0, graph, t, ...)
+  # convert h0 if h0 is vector
+  if (test_numeric(h0, lower = 0, len = n_elements, finite = TRUE, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE) &&
+      test_atomic_vector(h0, len = n_elements)) {
+    h0 <- as.matrix(h0)
+  } else {
+    assert(
+      test_matrix(h0, mode = 'numeric', nrows = n_elements, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      any(h0 >= 0),
+      combine = 'and'
+    )
   }
-)
 
-#' @rdname heat-diffusion-methods
-#' @aliases heat.diffusion,matrix,matrix-method
-setMethod(
-  "heat.diffusion",
-  signature = signature(h0="matrix", graph="matrix"),
-  function(h0, graph, t=.5, ...)
-  {
-    stopifnot(length(t) == 1)
-    if (t < 0) stop("pls provide positive t")
-    .check.starting.matrix(h0)
-    .check.graph(graph, h0)
-    if (any(diag(graph) != 0))
-    {
-      message("setting diag of graph to zero")
-      diag(graph) <- 0
-    }
-
-    invisible(
-      heat_diffusion_(h0, normalize.laplacian(graph), t))
+  # graph must be either matrix or dgCMatrix
+  diag(graph) <- 0
+  if (is.dgCMatrix(graph)) {
+    assert_dgCMatrix(graph)
+    # TODO: sparse matrix
+  } else {
+    assert(
+      test_matrix(graph, mode = 'numeric', nrows = n_elements, ncols = n_elements, min.rows = 3, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      any(graph >= 0),
+      combine = 'and'
+    )
+    heat <- heat_diffusion_(h0, laplacian_(graph), t)
   }
-)
+  return(heat)
+}
+

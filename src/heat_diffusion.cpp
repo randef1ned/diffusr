@@ -20,11 +20,8 @@
  * along with diffusr. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// [[Rcpp::depends(RcppEigen)]]
-#include <RcppEigen.h>
-// [[Rcpp::plugins(cpp11)]]
-#include <cmath>
-#include <Eigen/Eigenvalues>
+#include "../inst/include/diffusr.h"
+// #include <Eigen/Eigenvalues>
 
 //' Do graph diffusion using an heat diffusion on a Laplacian.
 //'
@@ -35,15 +32,14 @@
 //' @return  returns the distribution of heat at time t
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-Eigen::MatrixXd heat_diffusion_(const Eigen::MatrixXd& v0,
-                                const Eigen::MatrixXd& W,
-                                const double           t)
+MatrixXd heat_diffusion_(const MatrixXd& v0,
+                         const MatrixXd& W,
+                         const double    t)
 {
-    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> es(W);
-    Eigen::MatrixXd                                V  = es.eigenvectors();
-    Eigen::VectorXd                                D  = es.eigenvalues();
-    Eigen::MatrixXd                                co = V.transpose() * v0;
-
+    SelfAdjointEigenSolver<MatrixXd> es(W);
+    MatrixXd                         V  = es.eigenvectors();
+    VectorXd                         D  = es.eigenvalues();
+    MatrixXd                         co = V.transpose() * v0;
     // solution to the heat equation at time t
     for (int i = 0; i < co.rows(); ++i)
     {

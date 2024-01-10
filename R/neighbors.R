@@ -26,8 +26,6 @@
 #' than \code{k} neighbors having the same distance, all neighbors are returned.
 #'
 #' @export
-#' @docType methods
-#' @rdname nearest-neighbors-methods
 #'
 #' @param nodes  a \code{n}-dimensional integer vector of node indexes (1-based) for which the algorithm is applied iteratively
 #' @param graph  an (\code{n x n})-dimensional numeric non-negative adjacence matrix representing the graph
@@ -35,51 +33,40 @@
 #' @param ...  additional parameters
 #' @return  returns the kNN nodes as list of integer vectors of node indexes
 #'
+#' @useDynLib diffusr
+#'
+#' @importFrom checkmate assert_int assert_integer assert test_matrix
+#' @importFrom Rcpp sourceCpp
+#'
 #' @examples
-#'  # count of nodes
-#'  n <- 10
-#'  # indexes (integer) of nodes for which neighbors should be searched
-#'  node.idxs <- c(1L, 5L)
-#'  # the adjaceny matrix (does not need to be symmetric)
-#'  graph <- rbind(cbind(0, diag(n-1)), 0)
-#'  # compute the neighbors until depth 3
-#'  neighs <- nearest.neighbors(node.idxs, graph, 3)
-setGeneric(
-  "nearest.neighbors",
-  function(nodes, graph, k=1L, ...)
-  {
-    standardGeneric("nearest.neighbors")
-  },
-  package="diffusr"
-)
+#' # count of nodes
+#' n <- 10
+#' # indexes (integer) of nodes for which neighbors should be searched
+#' node.idxs <- c(1L, 5L)
+#' # the adjaceny matrix (does not need to be symmetric)
+#' graph <- rbind(cbind(0, diag(n-1)), 0)
+#' # compute the neighbors until depth 3
+#' neighs <- nearest.neighbors(node.idxs, graph, 3)
+nearest.neighbors <- function(nodes, graph, k = 1L, ...) {
+  ## Check the fucking inputs
+  n_elements <- nrow(graph)
+  assert_int(k, lower = 1, upper = n_elements, na.ok = FALSE, coerce = TRUE, null.ok = FALSE)
+  assert_integer(nodes, lower = 1, upper = n_elements, max.len = n_elements, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
+  nodes <- unique(nodes)
 
-
-#' @rdname nearest-neighbors-methods
-#' @aliases nearest.neighbors,integer,matrix-method
-setMethod(
-  "nearest.neighbors",
-  signature=signature(nodes="integer", graph="matrix"),
-  function(nodes, graph, k=1L, ...)
-  {
-    if (!is.numeric(nodes) && !is.integer(nodes))
-      stop('nodes has to be a vector of integer')
-    int.nodes <- unique(as.integer(nodes))
-    if (length(int.nodes) != length(nodes))
-      warning("casting nodes to int removed some of the indexes.")
-    if (any(int.nodes < 1))
-      stop("node idxs have to be 1-indexed!")
-    if ((!is.numeric(k) && !is.integer(k)) || length(k) != 1 || k < 1)
-      stop('k has to be a positive scalar int')
-    k <- as.integer(k)
-    .check.graph(graph)
-    if (any(diag(graph) != 0))
-    {
-      warning("setting diag of graph to zero")
-      diag(graph) <- 0
-    }
-    l <- neighbors_(int.nodes, graph, k)
-    names(l) <- int.nodes
-    
-    invisible(l)
+  # graph must be either matrix or dgCMatrix
+  diag(graph) <- 0
+  if (is.dgCMatrix(graph)) {
+    assert_dgCMatrix(graph)
+    # TODO: sparse matrix
+  } else {
+    assert(
+      test_matrix(graph, mode = 'numeric', nrows = n_elements, ncols = n_elements, min.rows = 3, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      any(graph >= 0),
+      combine = 'and'
+    )
+    neighbors <- neighbors_(nodes, graph, k)
   }
-)
+  names(neighbors) <- as.character(nodes)
+  return(neighbors)
+}

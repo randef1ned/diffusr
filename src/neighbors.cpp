@@ -20,19 +20,11 @@
  * along with diffusr. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// [[Rcpp::plugins(cpp11)]]
-#include <Rcpp.h>
-#include <vector>
-#include <set>
-#include <cstdlib>
-#ifdef _OPENMP
-#include <omp.h>
-#endif
-#include <queue>
+#include "../inst/include/diffusr.h"
 
 struct distance_comparator
 {
-    bool operator()(std::pair<int, double>& lhs, std::pair<int, double>& rhs)
+    bool operator()(pair<int, double>& lhs, pair<int, double>& rhs)
     {
         return lhs.second < rhs.second;
     }
@@ -43,39 +35,39 @@ bool equals(const double val, const double cmp, const double delta)
     return val <= cmp + delta && val >= cmp - delta;
 }
 
-std::priority_queue<std::pair<int, double>,
-                    std::vector<std::pair<int, double>>,
-                    distance_comparator>
-  init_queue(const Rcpp::NumericMatrix& W, const int source)
+priority_queue<pair<int, double>,
+               vector<pair<int, double>>,
+               distance_comparator>
+  init_queue(const NumericMatrix& W, const int source)
 {
-    std::priority_queue<std::pair<int, double>,
-                        std::vector<std::pair<int, double>>,
-                        distance_comparator> queue;
+    priority_queue<pair<int, double>,
+                   vector<pair<int, double>>,
+                   distance_comparator> queue;
 
     for (int i = 0; i < W.cols(); ++i)
     {
         if (i != source && W(source, i) > 0)
         {
-            queue.push(std::make_pair(i, W(source, i)));
+            queue.push(make_pair(i, W(source, i)));
         }
     }
 
     return queue;
 }
 
-std::vector<std::pair<int, double>> current_neighbors(
-  std::priority_queue<std::pair<int, double>,
-                      std::vector<std::pair<int, double>>,
-                      distance_comparator>& queue,
-  std::vector<uint8_t>& visited)
+vector<pair<int, double>> current_neighbors(
+  priority_queue<pair<int, double>,
+                 vector<pair<int, double>>,
+                 distance_comparator>& queue,
+  vector<uint8_t>& visited)
 {
 
     // get the nearest neighbor
-    std::pair<int, double> cn = queue.top();
+    pair<int, double> cn = queue.top();
     // remove from queue
     queue.pop();
 
-    std::vector<std::pair<int, double>> curr_nei;
+    vector<pair<int, double>> curr_nei;
     // add the node itself to the list, since we iterate over the list later
     if (!visited[cn.first])
     {
@@ -85,7 +77,7 @@ std::vector<std::pair<int, double>> current_neighbors(
     // add neighbors that are as close as the first neighbor `cn`
     while (queue.size() && equals(queue.top().second, cn.second, .001))
     {
-        std::pair<int, double> nn = queue.top();
+        pair<int, double> nn = queue.top();
         if (!visited[nn.first])
             curr_nei.push_back(nn);
         queue.pop();
@@ -95,45 +87,46 @@ std::vector<std::pair<int, double>> current_neighbors(
 }
 
 void add_neighbor_to_queue(
-  std::priority_queue<std::pair<int, double>,
-                    std::vector<std::pair<int, double>>,
-                    distance_comparator>& queue,
-  const Rcpp::NumericMatrix& W,
-  const std::pair<int, double>& cn)
+  priority_queue<pair<int, double>,
+                 vector<pair<int, double>>,
+                 distance_comparator>& queue,
+  const NumericMatrix& W,
+  const pair<int, double>& cn)
 {
     for (int i = 0; i < W.cols(); ++i)
     {
         if (i != cn.first && W(cn.first, i) > 0)
         {
-            queue.push(std::make_pair(i, W(cn.first, i)));
+            queue.push(make_pair(i, W(cn.first, i)));
         }
     }
 }
 
-void nearest_neighbor_dijkstra_(std::set<int>&             nei,
-                                const int                  source,
-                                const int                  max_depth,
-                                const Rcpp::NumericMatrix& W)
+set<int> nearest_neighbor_dijkstra_(
+                                const int            source,
+                                const int            max_depth,
+                                const NumericMatrix& W)
 {
     // use a priority queue to quickly extract nearest neighbors
-    std::priority_queue<std::pair<int, double>,
-                        std::vector<std::pair<int, double>>,
-                        distance_comparator>
+    priority_queue<pair<int, double>,
+                   vector<pair<int, double>>,
+                   distance_comparator>
       queue = init_queue(W, source);
     // boolean vector if nodes have already been visited in the BFS
-    std::vector<uint8_t> visited(W.rows(), false);
+    vector<uint8_t> visited(W.rows(), false);
 
     // traverse graph until a certain depth is reached
     int r = 1;
+    set<int> nei;
     do
     {
-        Rcpp::checkUserInterrupt();
+        checkUserInterrupt();
         // list of the nearest neighbors
-        std::vector<std::pair<int, double>> curr_nei =
+        vector<pair<int, double>> curr_nei =
           current_neighbors(queue, visited);
         // iterate over current nearest neighbors and add them to the results
         // list
-        for (const std::pair<int, double>& cn : curr_nei)
+        for (const pair<int, double>& cn : curr_nei)
         {
             if (visited[cn.first] && cn.first == source)
             {
@@ -150,6 +143,7 @@ void nearest_neighbor_dijkstra_(std::set<int>&             nei,
             add_neighbor_to_queue(queue, W, cn);
         }
     } while (r++ < max_depth && queue.size());
+    return nei;
 }
 
 //' Find the closest neighbors of a group of nodes in a graph.
@@ -162,26 +156,26 @@ void nearest_neighbor_dijkstra_(std::set<int>&             nei,
 //'  <emph>node_idxs</emph>
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-Rcpp::List neighbors_(const Rcpp::IntegerVector& node_idxs,
-                      const Rcpp::NumericMatrix& W,
-                      const int                  k)
+List neighbors_(const vector<int> &node_idxs,
+                const NumericMatrix& W,
+                const int            k)
 {
     // number of idxs given
-    const uint32_t len = static_cast<uint32_t>(node_idxs.size());
+    size_t len = node_idxs.size();
     // neighbors for every node
-    std::vector<std::set<int>> neighbors(len);
+    vector<set<int>> neighbors(len);
 
     // parallelize node search
-    #pragma omp parallel for
+    // Fucking R bug: you can never have R objects within the parallel sections
+    // #pragma omp parallel for
     for (uint32_t i = 0; i < len; ++i)
     {
         // substract one, cause R was one-based
-        const int node_idx = static_cast<int>(node_idxs[i]) - 1;
+        int node_idx = node_idxs[i] - 1;
         // neighbors of current node
-        neighbors[i] = std::set<int>();
         // run disjkstra until k neighbors are found
-        nearest_neighbor_dijkstra_(neighbors[i], node_idx, k, W);
+        neighbors[i] = nearest_neighbor_dijkstra_(node_idx, k, W);
     }
 
-    return Rcpp::wrap(neighbors);
+    return wrap(neighbors);
 }

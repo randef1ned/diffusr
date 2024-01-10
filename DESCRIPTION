@@ -1,7 +1,7 @@
 Package: diffusr
 Type: Package
 Title: Network Diffusion Algorithms
-Version: 0.1.4
+Version: 0.2.0
 Date: 2018-04-20
 Authors@R: person("Simon", "Dirmeier",
                   email = "simon.dirmeier@gmx.de",
@@ -14,8 +14,8 @@ Description: Implementation of network diffusion algorithms such as
   of water, the activation of neurons in the brain, or the location of a random
   surfer in the internet. The information (node weights) is iteratively propagated
   to other nodes until a equilibrium state or stop criterion occurs.
-URL: https://github.com/dirmeier/diffusr
-BugReports: https://github.com/dirmeier/diffusr/issues
+URL: https://github.com/randef1ned/diffusr
+BugReports: https://github.com/randef1ned/diffusr/issues
 License: GPL (>=3)
 Depends: R (>= 3.4)
 LazyData: TRUE
@@ -23,7 +23,9 @@ LinkingTo: Rcpp, RcppEigen
 Imports:
     Rcpp,
     igraph,
-    methods
+    methods,
+    checkmate,
+    matrixStats
 Suggests:
     knitr,
     rmarkdown,
@@ -31,5 +33,7 @@ Suggests:
     lintr,
     Matrix
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
-SystemRequirements: C++11
+RoxygenNote: 7.2.3
+Encoding: UTF-8
+Config/testthat/edition: 3
+SystemRequirements: C++17

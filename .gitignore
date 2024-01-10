@@ -32,6 +32,8 @@ Makefile.in
 glmnet
 *.rda
 .RData
+.Rhistory
+.Rapp.history
 src/*.o
 src/*.so
 .Rproj.user/*
@@ -69,3 +71,5 @@ nbactions.xml
 .Rproj.user
 src/*.dll
 inst/doc
+/doc/
+/Meta/

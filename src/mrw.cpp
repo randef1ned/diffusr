@@ -20,44 +20,7 @@
  * along with diffusr. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
- // [[Rcpp::depends(RcppEigen)]]
- #include <RcppEigen.h>
- #include <vector>
-
-
-Eigen::MatrixXd mrwr_analytical_(const Eigen::MatrixXd& p0,
-                                 const Eigen::MatrixXd& W,
-                                 const double           r)
-{
-    Eigen::MatrixXd I  = Eigen::MatrixXd::Identity(W.rows(), W.cols());
-    Eigen::MatrixXd T  = r * (I - (1 - r) * W).inverse();
-    Eigen::MatrixXd pt = T * p0;
-
-    return pt;
-}
-
-Eigen::MatrixXd mrwr_iterative_(const Eigen::MatrixXd& p0,
-                                const Eigen::MatrixXd& W,
-                                const double           r,
-                                const double           thresh,
-                                const int              niter)
-{
-    Eigen::MatrixXd pt = p0;
-    Eigen::MatrixXd pold;
-
-    int iter = 0;
-    do
-    {
-        if (iter % 25 == 0)
-            Rcpp::checkUserInterrupt();
-        pold = pt;
-        pt   = (1 - r) * W * pold + r * p0;
-    }
-    while ((pt - pold).norm() > thresh && iter++ < niter);
-
-    return pt;
-}
+#include "../inst/include/diffusr.h"
 
 //' Do a Markon random walk (with restart) on an column-normalised adjacency
 //' matrix.
@@ -74,19 +37,33 @@ Eigen::MatrixXd mrwr_iterative_(const Eigen::MatrixXd& p0,
 //' @return  returns the matrix of stationary distributions p_inf
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-Eigen::MatrixXd mrwr_(const Eigen::MatrixXd& p0,
-                      const Eigen::MatrixXd& W,
-                      const double           r,
-                      const double           thresh,
-                      const int              niter,
-                      const bool             do_analytical)
+VectorXd mrwr_(const MatrixXd& p0,
+               const MatrixXd& W,
+               const double           r,
+               const double           thresh,
+               const int              niter,
+               const bool             do_analytical)
 {
-    if (!do_analytical)
-    {
-        return mrwr_iterative_(p0, W, r, thresh, niter);
+    MatrixXd pt;
+    // VectorXd pt;
+    if (do_analytical) {
+        MatrixXd I  = MatrixXd::Identity(W.rows(), W.cols());
+        MatrixXd T  = r * (I - (1 - r) * W).inverse();
+        pt = T * p0;
+    } else {
+        MatrixXd pold;
+
+        int iter = 0;
+        pt = p0;
+        do
+        {
+            if (iter % 25 == 0)
+                Rcpp::checkUserInterrupt();
+            pold = pt;
+            pt   = (1 - r) * W * pold + r * p0;
+        }
+        while ((pt - pold).norm() > thresh && iter++ < niter);
     }
-    else
-    {
-        return mrwr_analytical_(p0, W, r);
-    }
+    VectorXd pt_v(MVectorXd(pt.data(), pt.rows()));
+    return pt_v;
 }

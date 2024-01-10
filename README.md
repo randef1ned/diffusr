@@ -13,6 +13,47 @@ Network diffusion algorithms in R.
 
 `diffusr` implements several algorithms for network diffusion such as *Markov random walks with restarts* and *weighted neighbor classification*. Network diffusion has been studied extensively in bioinformatics, e.g. in the field of cancer gene prioritization. Network diffusion algorithms generally spread information, e.g. encoded as node weights, along the edges of a graph to other nodes. These weights can for example be interpreted as temperature, an initial amount of water, the activation of neurons in the brain, or the location of a random surfer in the internet. The information (node weights) is iteratively propagated to other nodes until a equilibrium state or stop criterion occurs.
 
+## Before installation
+
+Before installation, we recommended you install Intel oneAPI Math Kernel Library (oneMKL) to optimize the computational performance of linear algebra.
+
+Windows users can download oneMKL from [Intel's website](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl-download.html) and install it in the default directory. The default directory is: `C:\Program Files (x86)\Intel\oneAPI`.
+
+Debian users can download oneMKL using apt in the Debian non-free repo:
+```{bash}
+# Install oneMKL version 2020.4.304-4
+sudo apt install intel-mkl-full
+```
+
+Or using the Intel repo:
+```{bash}
+# Set up the repository and signed the entry
+wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+| gpg --dearmor | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+# Update the package list
+sudo apt update
+# Install the latest oneMKL (version 2024.0)
+sudo apt install intel-oneapi-mkl
+```
+
+Fedora users can download oneMKL by using dnf:
+```{bash}
+# Create dnf repository file
+tee > /tmp/oneAPI.repo << EOF
+[oneAPI]
+name=Intel® oneAPI repository
+baseurl=https://yum.repos.intel.com/oneapi
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+EOF
+sudo mv /tmp/oneAPI.repo /etc/yum.repos.d
+# Install the latest oneMKL (version 2024.0)
+sudo dnf install intel-oneapi-mkl
+```
+
 ## Installation
 
 Install `diffusr` using:
@@ -22,7 +63,7 @@ install.packages("diffusr")
 
 Alternatively use the latest version from github:
 ```{r}
-devtools::install_github("dirmeier/diffusr")
+devtools::install_github("randef1ned/diffusr", build_vignettes = TRUE)
 ```
 
 ## Usage

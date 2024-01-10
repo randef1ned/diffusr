@@ -16,6 +16,6 @@ returns the matrix with hub correction
 Correct for hubs in an adjacency matrix
 }
 \examples{
- W <- matrix(abs(rnorm(10000)), 100, 100)
- cor.hub <- hub.correction(W)
+W <- matrix(abs(rnorm(10000)), 100, 100)
+cor.hub <- hub.correction(W)
 }

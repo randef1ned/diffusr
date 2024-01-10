@@ -25,40 +25,47 @@
 #' @param obj  matrix/vector that is stochstically normalized
 #' @param ...  additional params
 #' @return  returns the normalized matrix/vector
+#'
+#' @importFrom checkmate assert check_matrix test_numeric test_atomic_vector
+#' @importFrom matrixStats colSums2
+#'
 #' @examples
 #'  W <- matrix(abs(rnorm(10000)), 100, 100)
 #'  stoch.W <- normalize.stochastic(W)
 normalize.stochastic <- function(obj, ...)
 {
-  UseMethod("normalize.stochastic")
-}
-
-
-#' @export
-#' @method normalize.stochastic numeric
-normalize.stochastic.numeric <- function(obj, ...)
-{
-  if (any(obj < 0.0))
-    stop('please provide an object with only non-negative values!')
-  if (is.matrix(obj))
-  {
-    if (!all(.equals.double(colSums(obj), 1, .001)))
-    {
-      message("normalizing column vectors!")
-      obj <- stoch_col_norm_(obj)
-    }
-  }
-  else if (is.vector(obj))
-  {
+  is_matrix <- FALSE
+  if (test_numeric(obj, lower = 0, finite = TRUE, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE) &&
+      test_atomic_vector(obj)) {
     if (!.equals.double(sum(obj), 1, .001))
     {
       message("normalizing vector!")
-      obj <- obj/sum(obj)
     }
+  } else if (is.dgCMatrix(obj)) {
+    assert_dgCMatrix(obj)
+    is_matrix <- TRUE
+  } else {
+    assert(
+      check_matrix(obj, mode = 'numeric', any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      any(obj >= 0),
+      combine = 'and'
+    )
+    is_matrix <- TRUE
+  }
+  if (is_matrix) {
+    sums <- colSums2(obj)
+    if (!all(.equals.double(sums, 1, .001))) {
+      message("normalizing column vectors!")
+      empt_col_val <- 1.0 / ncol(obj)
+
+      obj <- obj / sums[col(obj)]
+      obj[, which(sums < empt_col_val)] <- 0.00001
+    }
+  } else {
+    obj <- obj / sum(obj)
   }
   return(obj)
 }
-
 
 #' Calculate the Laplacian of a matrix
 #'
@@ -67,66 +74,67 @@ normalize.stochastic.numeric <- function(obj, ...)
 #' @param obj  matrix for which the Laplacian is calculated
 #' @param ...  additional params
 #' @return  returns the Laplacian
+#'
+#' @importFrom checkmate assert check_matrix
+#' @importFrom Rcpp sourceCpp
+#'
 #' @examples
 #'  W <- matrix(abs(rnorm(10000)), 100, 100)
 #'  lapl.W <- normalize.laplacian(W)
 normalize.laplacian <- function(obj, ...)
 {
-  UseMethod("normalize.laplacian")
+  # UseMethod("normalize.laplacian")
+  if (is.dgCMatrix(obj)) {
+    assert_dgCMatrix(obj)
+    # TODO: sparse matrix
+  } else {
+    assert(
+      check_matrix(obj, mode = 'numeric', nrows = ncol(obj), ncols = nrow(obj), min.rows = 3, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      any(obj >= 0),
+      combine = 'and'
+    )
+    return(laplacian_(obj))
+  }
 }
-
-
-#' @export
-#' @method normalize.laplacian numeric
-normalize.laplacian.numeric <- function(obj, ...)
-{
-  if (!is.matrix(obj)) stop('please provide a matrix object!')
-  if (nrow(obj) != ncol(obj)) stop('please provide a square matrix!')
-  if (any(obj < 0.0))
-    stop('please provide a matrix with only non-negative alues!')
-  lapl <- laplacian_(obj)
-
-  lapl
-}
-
-
 
 #' Correct for hubs in an adjacency matrix
 #'
 #' @export
 #'
 #' @param obj  matrix for which hubs are corrected
+#'
 #' @return  returns the matrix with hub correction
+#'
+#' @useDynLib diffusr
+#'
+#' @importFrom checkmate assert check_matrix
+#' @importFrom Rcpp sourceCpp
+#'
 #' @examples
-#'  W <- matrix(abs(rnorm(10000)), 100, 100)
-#'  cor.hub <- hub.correction(W)
+#' W <- matrix(abs(rnorm(10000)), 100, 100)
+#' cor.hub <- hub.correction(W)
 hub.correction <- function(obj)
 {
-  UseMethod("hub.correction")
+  n_elements <- nrow(obj)
+  if (is.dgCMatrix(obj)) {
+    assert_dgCMatrix(obj)
+    # TODO: sparse matrix
+  } else {
+    assert(
+      check_matrix(obj, mode = 'numeric', nrows = n_elements, ncols = n_elements, min.rows = 3, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      any(obj >= 0),
+      combine = 'and'
+    )
+    return(hub_normalize_(obj))
+  }
 }
-
-
-#' @export
-#' @method hub.correction numeric
-hub.correction.numeric <- function(obj)
-{
-  if (!is.matrix(obj)) stop('please provide a matrix object!')
-  if (nrow(obj) != ncol(obj)) stop('please provide a square matrix!')
-  if (any(obj < 0.0))
-    stop('please provide a matrix with only non-negative alues!')
-  message("Correcting for hub degrees.")
-  hub.mat <- hub_normalize_(obj)
-
-  hub.mat
-}
-
 
 #' @noRd
 #' @importFrom igraph graph_from_adjacency_matrix components
 .is.ergodic <- function(obj)
 {
-  adj   <- igraph::graph_from_adjacency_matrix(
+  adj   <- graph_from_adjacency_matrix(
     obj, mode="directed", weighted=TRUE)
-  comps <- igraph::components(adj)
+  comps <- components(adj)
   ifelse(length(comps$csize) == 1, TRUE, FALSE)
 }

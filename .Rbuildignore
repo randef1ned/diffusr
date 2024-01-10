@@ -5,6 +5,7 @@
 .gitignore
 .git
 .idea
+.vscode
 .codecov.yml
 .lintr
 .clang-format
@@ -31,3 +32,5 @@ build-pkg*
 \.tar.gz$
 ^appveyor\.yml$
 .valgrindrc
+^doc$
+^Meta$

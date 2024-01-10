@@ -17,8 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with diffusr. If not, see <http://www.gnu.org/licenses/>.
 
-context("knn")
-
 test_that("knn neighbors path",{
   n <- 10
   adj <- rbind(cbind(0, diag(n-1)), 0)
