@@ -36,7 +36,8 @@
 #'
 #' @useDynLib diffusr
 #'
-#' @importFrom checkmate assert_int assert_integer assert test_matrix test_numeric test_atomic_vector
+#' @importFrom checkmate assert_int assert_integer assert test_matrix
+#'                       test_numeric test_atomic_vector
 #' @importFrom Rcpp sourceCpp
 #'
 #' @references
@@ -51,20 +52,22 @@
 #' # adjacency matrix (either normalized or not)
 #' graph <- matrix(abs(rnorm(n*n)), n, n)
 #' # computation of stationary distribution
-#' ht <- heat.diffusion(h0, graph)
+#' heat <- heat.diffusion(h0, graph)
 heat.diffusion <- function(h0, graph, t = 0.5, ...) {
   assert_number(t, lower = 0, na.ok = FALSE, finite = TRUE, null.ok = FALSE)
   n_elements <- nrow(graph)
 
   # convert h0 if h0 is vector
-  if (test_numeric(h0, lower = 0, len = n_elements, finite = TRUE, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE) &&
+  if (test_numeric(h0, lower = 0, len = n_elements, finite = TRUE,
+                   any.missing = FALSE, all.missing = FALSE, null.ok = FALSE) &&
       test_atomic_vector(h0, len = n_elements)) {
     h0 <- as.matrix(h0)
   } else {
     assert(
-      test_matrix(h0, mode = 'numeric', nrows = n_elements, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      test_matrix(h0, mode = "numeric", nrows = n_elements, any.missing = FALSE,
+                  all.missing = FALSE, null.ok = FALSE),
       any(h0 >= 0),
-      combine = 'and'
+      combine = "and"
     )
   }
 
@@ -75,12 +78,13 @@ heat.diffusion <- function(h0, graph, t = 0.5, ...) {
     # TODO: sparse matrix
   } else {
     assert(
-      test_matrix(graph, mode = 'numeric', nrows = n_elements, ncols = n_elements, min.rows = 3, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      test_matrix(graph, mode = "numeric", nrows = n_elements,
+                  ncols = n_elements, min.rows = 3, any.missing = FALSE,
+                  all.missing = FALSE, null.ok = FALSE),
       any(graph >= 0),
-      combine = 'and'
+      combine = "and"
     )
     heat <- heat_diffusion_(h0, laplacian_(graph), t)
   }
   return(heat)
 }
-

@@ -18,7 +18,6 @@
 # along with diffusr. If not, see <http://www.gnu.org/licenses/>.
 
 #' @noRd
-.equals.double <- function(val, cmp, delta)
-{
+.equals.double <- function(val, cmp, delta) {
   val  <= cmp + delta  &  val >=  cmp - delta
 }

@@ -38,9 +38,9 @@
 #'
 #' @param thresh  threshold for breaking the iterative computation of the
 #'  stationary distribution. If the absolute difference of the distribution at
-#'  time point $t-1$ and $t$ is less than \code{thresh}, then the algorithm stops.
-#'  If \code{thresh} is not reached before \code{niter}, then the algorithm stops
-#'  as well.
+#'  time point \eqn{t-1} and \eqn{t} is less than \code{thresh}, then the
+#'  algorithm stops. If \code{thresh} is not reached before \code{niter}, then
+#'  the algorithm stops as well.
 #'
 #' @param niter  maximal number of iterations for computation of the
 #'  Markov chain. If \code{thresh} is not reached, then \code{niter} is used as
@@ -62,21 +62,24 @@
 #' @return  returns a list with the following elements
 #'  \itemize{
 #'   \item p.inf  the stationary distribution as numeric vector
-#'   \item transition.matrix the column normalized transition matrix used for the random walk
+#'   \item transition.matrix the column normalized transition matrix used for
+#'         the random walk
 #'  }
 #'
 #' @references
 #' Tong, H., Faloutsos, C., & Pan, J. Y. (2006),
-#' Fast random walk with restart and its applications.\cr \cr
+#' Fast random walk with restart and its applications.
+#'
 #' Koehler, S., Bauer, S., Horn, D., & Robinson, P. N. (2008),
 #' Walking the interactome for prioritization of candidate disease genes.
-#' \emph{The American Journal of Human Genetics}\cr \cr
+#' \emph{The American Journal of Human Genetics}
 #'
 #' @export
 #'
 #' @useDynLib diffusr
 #'
-#' @importFrom checkmate assert_number assert_int assert_logical test_numeric assert test_matrix check_numeric
+#' @importFrom checkmate assert_number assert_int assert_logical test_numeric
+#'                       assert test_matrix check_numeric
 #' @importFrom Rcpp sourceCpp
 #'
 #' @examples
@@ -90,37 +93,46 @@
 #' pt    <- random.walk(p0, graph)
 #'
 random.walk <- function(p0, graph, r = 0.5, niter = 1e4, thresh = 1e-4,
-                               do.analytical = FALSE, correct.for.hubs = FALSE,
-                               ergodic.tolerance = FALSE, return.pt.only = FALSE) {
+                        do.analytical = FALSE, correct.for.hubs = FALSE,
+                        ergodic.tolerance = FALSE, return.pt.only = FALSE) {
   ## Check the fucking inputs
-  assert_number(r, lower = 0, upper = 1, na.ok = FALSE, finite = TRUE, null.ok = FALSE)
+  assert_number(r, lower = 0, upper = 1, na.ok = FALSE, finite = TRUE,
+                null.ok = FALSE)
   assert_int(niter, lower = 2, na.ok = FALSE, coerce = TRUE, null.ok = FALSE)
-  assert_number(thresh, lower = 0, na.ok = FALSE, finite = TRUE, null.ok = FALSE)
-  assert_logical(do.analytical, len = 1, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
-  assert_logical(correct.for.hubs, len = 1, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
+  assert_number(thresh, lower = 0, na.ok = FALSE, finite = TRUE,
+                null.ok = FALSE)
+  assert_logical(do.analytical, len = 1, any.missing = FALSE,
+                 all.missing = FALSE, null.ok = FALSE)
+  assert_logical(correct.for.hubs, len = 1, any.missing = FALSE,
+                 all.missing = FALSE, null.ok = FALSE)
 
   # graph must be either matrix or dgCMatrix
   n_elements <- nrow(graph)
   if (is.dgCMatrix(graph)) {
     assert_dgCMatrix(graph)
     sparse <- TRUE
+    # TODO: sparse matrix
   } else {
     assert(
-      test_matrix(graph, mode = 'numeric', nrows = n_elements, ncols = n_elements, min.rows = 3, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      test_matrix(graph, mode = "numeric", min.rows = 3, nrows = n_elements,
+                  ncols = n_elements, any.missing = FALSE, all.missing = FALSE,
+                  null.ok = FALSE),
       any(graph >= 0),
-      combine = 'and'
+      combine = "and"
     )
     sparse <- FALSE
   }
 
   # convert p0 if p0 is vector
-  if (test_numeric(p0, lower = 0, len = n_elements, finite = TRUE, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)) {
+  if (test_numeric(p0, lower = 0, len = n_elements, finite = TRUE,
+                   any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)) {
     p0 <- as.matrix(p0)
   } else {
     assert(
-      test_matrix(p0, mode = 'numeric', nrows = n_elements, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      test_matrix(p0, mode = "numeric", nrows = n_elements, any.missing = FALSE,
+                  all.missing = FALSE, null.ok = FALSE),
       any(p0 >= 0),
-      combine = 'and'
+      combine = "and"
     )
   }
 
@@ -136,11 +148,9 @@ random.walk <- function(p0, graph, r = 0.5, niter = 1e4, thresh = 1e-4,
   }
 
   l <- mrwr_(normalize.stochastic(p0),
-              stoch.graph, r, thresh, niter, do.analytical)
+             stoch.graph, r, thresh, niter, do.analytical)
   if (!return.pt.only) {
-    l <- list(
-      p.inf=l,
-      transition.matrix=stoch.graph)
+    l <- list(p.inf = l, transition.matrix = stoch.graph)
   }
 
   return(l)

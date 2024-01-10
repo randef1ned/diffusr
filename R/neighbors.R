@@ -20,18 +20,26 @@
 
 #' Graph diffusion using nearest neighbors
 #'
-#' @description For every node in a set of nodes the graph gets traversed along
-#' the node's shortest paths to its neighbors. Nearest neighbors are added
-#' until a maximum depth of \code{k} is reached. For settings where there are more
-#' than \code{k} neighbors having the same distance, all neighbors are returned.
+#' @description
+#' For every node in a set of nodes the graph gets traversed along the node's
+#' shortest paths to its neighbors. Nearest neighbors are added until a maximum
+#' depth of \code{k} is reached. For settings where there are more than \code{k}
+#' neighbors having the same distance, all neighbors are returned.
 #'
 #' @export
 #'
-#' @param nodes  a \code{n}-dimensional integer vector of node indexes (1-based) for which the algorithm is applied iteratively
-#' @param graph  an (\code{n x n})-dimensional numeric non-negative adjacence matrix representing the graph
-#' @param k  the depth of the nearest neighbor search, e.g. the depth of the graph traversal
-#' @param ...  additional parameters
-#' @return  returns the kNN nodes as list of integer vectors of node indexes
+#' @param nodes a \eqn{n}-dimensional integer vector of node indexes (1-based)
+#'   for which the algorithm is applied iteratively
+#'
+#' @param graph an (\eqn{n \times n})-dimensional numeric non-negative adjacence
+#'   matrix representing the graph
+#'
+#' @param k the depth of the nearest neighbor search, e.g. the depth of the
+#'   graph traversal
+#'
+#' @param ... additional parameters
+#'
+#' @return returns the kNN nodes as list of integer vectors of node indexes
 #'
 #' @useDynLib diffusr
 #'
@@ -50,8 +58,10 @@
 nearest.neighbors <- function(nodes, graph, k = 1L, ...) {
   ## Check the fucking inputs
   n_elements <- nrow(graph)
-  assert_int(k, lower = 1, upper = n_elements, na.ok = FALSE, coerce = TRUE, null.ok = FALSE)
-  assert_integer(nodes, lower = 1, upper = n_elements, max.len = n_elements, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
+  assert_int(k, lower = 1, upper = n_elements, na.ok = FALSE, coerce = TRUE,
+             null.ok = FALSE)
+  assert_integer(nodes, lower = 1, upper = n_elements, max.len = n_elements,
+                 any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
   nodes <- unique(nodes)
 
   # graph must be either matrix or dgCMatrix
@@ -61,9 +71,11 @@ nearest.neighbors <- function(nodes, graph, k = 1L, ...) {
     # TODO: sparse matrix
   } else {
     assert(
-      test_matrix(graph, mode = 'numeric', nrows = n_elements, ncols = n_elements, min.rows = 3, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      test_matrix(graph, mode = "numeric", min.rows = 3, nrows = n_elements,
+                  ncols = n_elements, any.missing = FALSE, all.missing = FALSE,
+                  null.ok = FALSE),
       any(graph >= 0),
-      combine = 'and'
+      combine = "and"
     )
     neighbors <- neighbors_(nodes, graph, k)
   }

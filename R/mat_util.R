@@ -32,13 +32,12 @@
 #' @examples
 #'  W <- matrix(abs(rnorm(10000)), 100, 100)
 #'  stoch.W <- normalize.stochastic(W)
-normalize.stochastic <- function(obj, ...)
-{
+normalize.stochastic <- function(obj, ...) {
   is_matrix <- FALSE
-  if (test_numeric(obj, lower = 0, finite = TRUE, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE) &&
+  if (test_numeric(obj, lower = 0, finite = TRUE, any.missing = FALSE,
+                   all.missing = FALSE, null.ok = FALSE) &&
       test_atomic_vector(obj)) {
-    if (!.equals.double(sum(obj), 1, .001))
-    {
+    if (!.equals.double(sum(obj), 1, .001)) {
       message("normalizing vector!")
     }
   } else if (is.dgCMatrix(obj)) {
@@ -46,9 +45,10 @@ normalize.stochastic <- function(obj, ...)
     is_matrix <- TRUE
   } else {
     assert(
-      check_matrix(obj, mode = 'numeric', any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      check_matrix(obj, mode = "numeric", any.missing = FALSE,
+                   all.missing = FALSE, null.ok = FALSE),
       any(obj >= 0),
-      combine = 'and'
+      combine = "and"
     )
     is_matrix <- TRUE
   }
@@ -81,17 +81,17 @@ normalize.stochastic <- function(obj, ...)
 #' @examples
 #'  W <- matrix(abs(rnorm(10000)), 100, 100)
 #'  lapl.W <- normalize.laplacian(W)
-normalize.laplacian <- function(obj, ...)
-{
-  # UseMethod("normalize.laplacian")
+normalize.laplacian <- function(obj, ...) {
   if (is.dgCMatrix(obj)) {
     assert_dgCMatrix(obj)
     # TODO: sparse matrix
   } else {
     assert(
-      check_matrix(obj, mode = 'numeric', nrows = ncol(obj), ncols = nrow(obj), min.rows = 3, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      check_matrix(obj, mode = "numeric", nrows = ncol(obj), ncols = nrow(obj),
+                   min.rows = 3, any.missing = FALSE, all.missing = FALSE,
+                   null.ok = FALSE),
       any(obj >= 0),
-      combine = 'and'
+      combine = "and"
     )
     return(laplacian_(obj))
   }
@@ -113,17 +113,18 @@ normalize.laplacian <- function(obj, ...)
 #' @examples
 #' W <- matrix(abs(rnorm(10000)), 100, 100)
 #' cor.hub <- hub.correction(W)
-hub.correction <- function(obj)
-{
+hub.correction <- function(obj) {
   n_elements <- nrow(obj)
   if (is.dgCMatrix(obj)) {
     assert_dgCMatrix(obj)
     # TODO: sparse matrix
   } else {
     assert(
-      check_matrix(obj, mode = 'numeric', nrows = n_elements, ncols = n_elements, min.rows = 3, any.missing = FALSE, all.missing = FALSE, null.ok = FALSE),
+      check_matrix(obj, mode = "numeric", min.rows = 3, nrows = n_elements,
+                   ncols = n_elements, any.missing = FALSE, all.missing = FALSE,
+                   null.ok = FALSE),
       any(obj >= 0),
-      combine = 'and'
+      combine = "and"
     )
     return(hub_normalize_(obj))
   }
@@ -131,10 +132,8 @@ hub.correction <- function(obj)
 
 #' @noRd
 #' @importFrom igraph graph_from_adjacency_matrix components
-.is.ergodic <- function(obj)
-{
-  adj   <- graph_from_adjacency_matrix(
-    obj, mode="directed", weighted=TRUE)
+.is.ergodic <- function(obj) {
+  adj   <- graph_from_adjacency_matrix(obj, mode = "directed", weighted = TRUE)
   comps <- components(adj)
   ifelse(length(comps$csize) == 1, TRUE, FALSE)
 }
