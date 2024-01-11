@@ -68,7 +68,7 @@ nearest.neighbors <- function(nodes, graph, k = 1L, ...) {
   diag(graph) <- 0
   if (is.dgCMatrix(graph)) {
     assert_dgCMatrix(graph)
-    # TODO: sparse matrix
+    neighbors <- neighbors_s(nodes, graph, k)
   } else {
     assert(
       test_matrix(graph, mode = "numeric", min.rows = 3, nrows = n_elements,

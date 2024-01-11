@@ -38,12 +38,47 @@ MatrixXd stoch_col_norm_(const MatrixXd& W)
     #pragma omp parallel for
     for (unsigned int i = 0; i < W.cols(); ++i)
     {
-        if ((W.col(i)).sum() <= zero_col)
+        if (colsums[i] <= zero_col)
             res.col(i).fill(empt_col_val);
         else
             res.col(i) = W.col(i) / colsums(i);
     }
 
+    return res;
+}
+
+template <typename T> MatrixXd compute_laplacian(const T &W, const ArrayXd rowsums_m, const size_t P);
+
+template <> MatrixXd compute_laplacian(const MatrixXd &W, const ArrayXd rowsums, const size_t P) {
+    ArrayXd rowsums_m = rowsums.replicate(1, P).array().sqrt().inverse();
+    MatrixXd res = - W.array() * (rowsums_m.transpose() * rowsums_m) * W.array().cast<bool>().cast<double>();
+    return res;
+}
+
+template <> MatrixXd compute_laplacian(const SpMat &W, const ArrayXd rowsums, const size_t P) {
+    VectorXd rowsums_m = rowsums.replicate(1, P).cwiseSqrt().cwiseInverse();
+    MatrixXd res = rowsums_m.transpose().cwiseProduct(rowsums_m).cwiseProduct(-W).cwiseProduct(W.cast<bool>().cast<double>());
+    return res;
+}
+
+template <typename T> MatrixXd laplacian_t(const T& W)
+{
+    const size_t       P = W.rows();
+    //MatrixXd res(P, P);
+    // Equivalent with: VectorXd rowsums = W.rowwise().sum();
+    ArrayXd rowsums = (W * VectorXd::Ones(P)).array();
+    
+    // for diagnoals
+    ArrayXd W_diags = 1 - W.diagonal().array() / rowsums;
+    W_diags *= (rowsums != 0.0).cast<double>();
+    
+    // for others
+    //ArrayXd rowsums_m = rowsums.replicate(1, P).array().sqrt().inverse();
+    //MatrixXd res = - W.array() * (rowsums_m.transpose() * rowsums_m) * W.array().cast<bool>().cast<double>();
+    MatrixXd res = compute_laplacian(W, rowsums, P);
+    //res.noalias() = rowsums_m.transpose().cwiseProduct(rowsums_m).cwiseProduct(-W).cwiseProduct(W.cast<bool>().cast<double>());
+    // Rcout << - W * rowsums_m.transpose().cwiseProduct(rowsums_m) << endl << endl;
+    res.diagonal().array() = W_diags;
     return res;
 }
 
@@ -54,34 +89,27 @@ MatrixXd stoch_col_norm_(const MatrixXd& W)
 //' @return  returns the Laplacian of a matrix
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-MatrixXd laplacian_(const MatrixXd& W)
-{
-    const int       P = W.rows();
-    MatrixXd res(W.rows(), W.cols());
-    VectorXd rowsums = W.rowwise().sum();
-    for (int i = 0; i < P; ++i)
-    {
-        if (i % 25) {
-            Rcpp::checkUserInterrupt();
-        }
-        #pragma omp parallel for
-        for (int j = 0; j < P; ++j)
-        {
-            if (i == j && rowsums[i] != 0)
-                res(i, j) = 1 - (W(i, j) / rowsums(i));
-            else if (i != j && W(i, j) != 0)
-                res(i, j) = -W(i, j) / sqrt(rowsums(i) * rowsums(j));
-            else
-                res(i, j) = 0;
-        }
-    }
-    return res;
+MatrixXd laplacian_(const MatrixXd &W) {
+    return laplacian_t(W);
 }
 
+//' Calculate the Laplacian of a weighted matrix.
+//'
+//' @noRd
+//' @param W  the adjacency matrix for which the Laplacian is calculated
+//' @return  returns the Laplacian of a matrix
+// [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::export]]
+MatrixXd laplacian_s(const SpMat &W) {
+    return laplacian_t(W);
+}
 
-double identity_(double d)
-{
-    return d;
+template <typename T>
+VectorXd node_degrees_t(const T &W) {
+    MatrixXd Wi = W.template cast<bool>().template cast<double>();
+    VectorXd node_degrees = Wi.rowwise().sum();
+
+    return node_degrees;
 }
 
 //' Get the unweighted node degrees of a adjacency matrix.
@@ -91,22 +119,42 @@ double identity_(double d)
 //' @return  returns the node degrees as vectors.
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-vector<double> node_degrees_(const MatrixXd& W)
-{
-    vector<double> node_degrees(W.rows());
-    #pragma omp parallel for
-    for (unsigned int i = 0; i < W.rows(); ++i)
-    {
-      node_degrees[i] = 0;
-      for (unsigned int j = 0; j < W.cols(); ++j)
-      {
-        if (W(i, j) != 0) node_degrees[i]++;
-      }
-    }
-
-    return node_degrees;
+VectorXd node_degrees_(const MatrixXd &W) {
+    return node_degrees_t(W);
 }
 
+//' Get the unweighted node degrees of a adjacency matrix.
+//'
+//' @noRd
+//' @param W  the adjacency matrix to be normalized
+//' @return  returns the node degrees as vectors.
+// [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::export]]
+VectorXd node_degrees_s(const MSpMat &W) {
+    return node_degrees_t(W);
+}
+
+template <typename temp>
+MatrixXd hub_normalize_t(const temp &W) {
+    // auto &fc(identity_);
+    size_t n = W.rows();
+    // Equivalent with: MatrixXd res = MatrixXd::Constant(W.rows(), W.cols(), 0.0);
+    temp res = temp(n, n);
+    
+    VectorXd node_degrees = node_degrees_t(W);
+    
+    #pragma omp parallel for
+    for (unsigned int i = 0; i < n; ++i) {
+        for (unsigned int j = 0; j < n; ++j) {
+            if (W.coeff(i, j) != 0) {
+                // Equivlant with: double mh = fc(node_degrees[i] / node_degrees[j]);
+                double mh = node_degrees[i] / node_degrees[j];
+                res.coeffRef(i, j) = min(1.0, mh) / node_degrees[i];
+            }
+        }
+    }
+    return res;
+}
 
 //' Normalize the hub bias in a matrix.
 //'
@@ -115,23 +163,17 @@ vector<double> node_degrees_(const MatrixXd& W)
 //' @return  returns the hub corrected matrix
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-MatrixXd hub_normalize_(const MatrixXd& W)
-{
-    auto &fc(identity_);
-    MatrixXd res = MatrixXd::Constant(W.rows(), W.cols(), 0.0);
-    vector<double> node_degrees = node_degrees_(W);
-    #pragma omp parallel for
-    for (unsigned int i = 0; i < W.rows(); ++i)
-    {
-      for (unsigned int j = 0; j < W.cols(); ++j)
-      {
-          if (W(i, j) != 0)
-          {
-              double mh = fc(node_degrees[i] / node_degrees[j]);
-              res(i, j) = min(1.0, mh) / node_degrees[i];
-          }
-      }
-    }
+MatrixXd hub_normalize_(const MatrixXd &W) {
+    return hub_normalize_t(W);
+}
 
-    return res;
+//' Normalize the hub bias in a matrix.
+//'
+//' @noRd
+//' @param W  the adjacency matrix to be normalized
+//' @return  returns the hub corrected matrix
+// [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::export]]
+MatrixXd hub_normalize_s(const SpMat &W) {
+    return hub_normalize_t(W);
 }

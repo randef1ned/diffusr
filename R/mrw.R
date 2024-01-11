@@ -55,7 +55,7 @@
 #'  \deqn{ P(j | i) =  1 /degree(i) *  min(1, degree(j)/degree(j))}
 #'  \emph{Note that this will not consider edge weights.}
 #'
-#' @param ergodic.tolerance Tolerance ergodic of the graph.
+#' @param allow.ergodic Allow multiple components in a graph.
 #'
 #' @param return.pt.only Return pt only.
 #'
@@ -94,7 +94,7 @@
 #'
 random.walk <- function(p0, graph, r = 0.5, niter = 1e4, thresh = 1e-4,
                         do.analytical = FALSE, correct.for.hubs = FALSE,
-                        ergodic.tolerance = FALSE, return.pt.only = FALSE) {
+                        allow.ergodic = FALSE, return.pt.only = FALSE) {
   ## Check the fucking inputs
   assert_number(r, lower = 0, upper = 1, na.ok = FALSE, finite = TRUE,
                 null.ok = FALSE)
@@ -111,7 +111,6 @@ random.walk <- function(p0, graph, r = 0.5, niter = 1e4, thresh = 1e-4,
   if (is.dgCMatrix(graph)) {
     assert_dgCMatrix(graph)
     sparse <- TRUE
-    # TODO: sparse matrix
   } else {
     assert(
       test_matrix(graph, mode = "numeric", min.rows = 3, nrows = n_elements,
@@ -142,13 +141,20 @@ random.walk <- function(p0, graph, r = 0.5, niter = 1e4, thresh = 1e-4,
     graph <- hub.correction(graph)
   }
   stoch.graph <- normalize.stochastic(graph)
-  if ((!ergodic.tolerance) && (!.is.ergodic(stoch.graph))) {
+  if ((!allow.ergodic) && (!.is.ergodic(stoch.graph))) {
     stop(paste("the provided graph has more than one component.",
                "It is likely not ergodic."))
   }
 
-  l <- mrwr_(normalize.stochastic(p0),
-             stoch.graph, r, thresh, niter, do.analytical)
+  if (sparse) {
+    # sparse matrix
+    l <- mrwr_s(normalize.stochastic(p0),
+                stoch.graph, r, thresh, niter, do.analytical)
+  } else {
+    # dense matrix
+    l <- mrwr_(normalize.stochastic(p0),
+               stoch.graph, r, thresh, niter, do.analytical)
+  }
   if (!return.pt.only) {
     l <- list(p.inf = l, transition.matrix = stoch.graph)
   }

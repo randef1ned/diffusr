@@ -12,7 +12,7 @@ random.walk(
   thresh = 1e-04,
   do.analytical = FALSE,
   correct.for.hubs = FALSE,
-  ergodic.tolerance = FALSE,
+  allow.ergodic = FALSE,
   return.pt.only = FALSE
 )
 }
@@ -33,9 +33,9 @@ stop criterion.}
 
 \item{thresh}{threshold for breaking the iterative computation of the
 stationary distribution. If the absolute difference of the distribution at
-time point $t-1$ and $t$ is less than \code{thresh}, then the algorithm stops.
-If \code{thresh} is not reached before \code{niter}, then the algorithm stops
-as well.}
+time point \eqn{t-1} and \eqn{t} is less than \code{thresh}, then the
+algorithm stops. If \code{thresh} is not reached before \code{niter}, then
+the algorithm stops as well.}
 
 \item{do.analytical}{boolean if the stationary distribution shall be
 computed solving the analytical solution or rather iteratively}
@@ -46,7 +46,7 @@ degree. In that case the original input matrix will be normalized as:
 \deqn{ P(j | i) =  1 /degree(i) *  min(1, degree(j)/degree(j))}
 \emph{Note that this will not consider edge weights.}}
 
-\item{ergodic.tolerance}{Tolerance ergodic of the graph.}
+\item{allow.ergodic}{Allow multiple components in a graph.}
 
 \item{return.pt.only}{Return pt only.}
 }
@@ -54,7 +54,8 @@ degree. In that case the original input matrix will be normalized as:
 returns a list with the following elements
  \itemize{
   \item p.inf  the stationary distribution as numeric vector
-  \item transition.matrix the column normalized transition matrix used for the random walk
+  \item transition.matrix the column normalized transition matrix used for
+        the random walk
  }
 }
 \description{
@@ -76,8 +77,9 @@ pt    <- random.walk(p0, graph)
 }
 \references{
 Tong, H., Faloutsos, C., & Pan, J. Y. (2006),
-Fast random walk with restart and its applications.\cr \cr
+Fast random walk with restart and its applications.
+
 Koehler, S., Bauer, S., Horn, D., & Robinson, P. N. (2008),
 Walking the interactome for prioritization of candidate disease genes.
-\emph{The American Journal of Human Genetics}\cr \cr
+\emph{The American Journal of Human Genetics}
 }

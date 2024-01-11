@@ -118,8 +118,42 @@ RcppExport SEXP _diffusr_laplacian_(SEXP WSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// laplacian_s
+MatrixXd laplacian_s(const SpMat& W);
+static SEXP _diffusr_laplacian_s_try(SEXP WSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const SpMat& >::type W(WSEXP);
+    rcpp_result_gen = Rcpp::wrap(laplacian_s(W));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _diffusr_laplacian_s(SEXP WSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_diffusr_laplacian_s_try(WSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // node_degrees_
-vector<double> node_degrees_(const MatrixXd& W);
+VectorXd node_degrees_(const MatrixXd& W);
 static SEXP _diffusr_node_degrees__try(SEXP WSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -133,6 +167,40 @@ RcppExport SEXP _diffusr_node_degrees_(SEXP WSEXP) {
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
         rcpp_result_gen = PROTECT(_diffusr_node_degrees__try(WSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// node_degrees_s
+VectorXd node_degrees_s(const MSpMat& W);
+static SEXP _diffusr_node_degrees_s_try(SEXP WSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const MSpMat& >::type W(WSEXP);
+    rcpp_result_gen = Rcpp::wrap(node_degrees_s(W));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _diffusr_node_degrees_s(SEXP WSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_diffusr_node_degrees_s_try(WSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -167,6 +235,40 @@ RcppExport SEXP _diffusr_hub_normalize_(SEXP WSEXP) {
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
         rcpp_result_gen = PROTECT(_diffusr_hub_normalize__try(WSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// hub_normalize_s
+MatrixXd hub_normalize_s(const SpMat& W);
+static SEXP _diffusr_hub_normalize_s_try(SEXP WSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const SpMat& >::type W(WSEXP);
+    rcpp_result_gen = Rcpp::wrap(hub_normalize_s(W));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _diffusr_hub_normalize_s(SEXP WSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_diffusr_hub_normalize_s_try(WSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -225,14 +327,53 @@ RcppExport SEXP _diffusr_mrwr_(SEXP p0SEXP, SEXP WSEXP, SEXP rSEXP, SEXP threshS
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// mrwr_s
+VectorXd mrwr_s(const MatrixXd& p0, const SpMat& W, const double r, const double thresh, const int niter, const bool do_analytical);
+static SEXP _diffusr_mrwr_s_try(SEXP p0SEXP, SEXP WSEXP, SEXP rSEXP, SEXP threshSEXP, SEXP niterSEXP, SEXP do_analyticalSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const MatrixXd& >::type p0(p0SEXP);
+    Rcpp::traits::input_parameter< const SpMat& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< const double >::type thresh(threshSEXP);
+    Rcpp::traits::input_parameter< const int >::type niter(niterSEXP);
+    Rcpp::traits::input_parameter< const bool >::type do_analytical(do_analyticalSEXP);
+    rcpp_result_gen = Rcpp::wrap(mrwr_s(p0, W, r, thresh, niter, do_analytical));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _diffusr_mrwr_s(SEXP p0SEXP, SEXP WSEXP, SEXP rSEXP, SEXP threshSEXP, SEXP niterSEXP, SEXP do_analyticalSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_diffusr_mrwr_s_try(p0SEXP, WSEXP, rSEXP, threshSEXP, niterSEXP, do_analyticalSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // neighbors_
-List neighbors_(const vector<int>& node_idxs, const NumericMatrix& W, const int k);
+List neighbors_(const vector<int>& node_idxs, const MatrixXd& W, const int& k);
 static SEXP _diffusr_neighbors__try(SEXP node_idxsSEXP, SEXP WSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const vector<int>& >::type node_idxs(node_idxsSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type W(WSEXP);
-    Rcpp::traits::input_parameter< const int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< const MatrixXd& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const int& >::type k(kSEXP);
     rcpp_result_gen = Rcpp::wrap(neighbors_(node_idxs, W, k));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
@@ -261,6 +402,42 @@ RcppExport SEXP _diffusr_neighbors_(SEXP node_idxsSEXP, SEXP WSEXP, SEXP kSEXP) 
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// neighbors_s
+List neighbors_s(const vector<int>& node_idxs, const MSpMat& W, const int& k);
+static SEXP _diffusr_neighbors_s_try(SEXP node_idxsSEXP, SEXP WSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const vector<int>& >::type node_idxs(node_idxsSEXP);
+    Rcpp::traits::input_parameter< const MSpMat& >::type W(WSEXP);
+    Rcpp::traits::input_parameter< const int& >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(neighbors_s(node_idxs, W, k));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _diffusr_neighbors_s(SEXP node_idxsSEXP, SEXP WSEXP, SEXP kSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_diffusr_neighbors_s_try(node_idxsSEXP, WSEXP, kSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _diffusr_RcppExport_validate(const char* sig) { 
@@ -269,10 +446,15 @@ static int _diffusr_RcppExport_validate(const char* sig) {
         signatures.insert("MatrixXd(*heat_diffusion_)(const MatrixXd&,const MatrixXd&,const double)");
         signatures.insert("MatrixXd(*stoch_col_norm_)(const MatrixXd&)");
         signatures.insert("MatrixXd(*laplacian_)(const MatrixXd&)");
-        signatures.insert("vector<double>(*node_degrees_)(const MatrixXd&)");
+        signatures.insert("MatrixXd(*laplacian_s)(const SpMat&)");
+        signatures.insert("VectorXd(*node_degrees_)(const MatrixXd&)");
+        signatures.insert("VectorXd(*node_degrees_s)(const MSpMat&)");
         signatures.insert("MatrixXd(*hub_normalize_)(const MatrixXd&)");
+        signatures.insert("MatrixXd(*hub_normalize_s)(const SpMat&)");
         signatures.insert("VectorXd(*mrwr_)(const MatrixXd&,const MatrixXd&,const double,const double,const int,const bool)");
-        signatures.insert("List(*neighbors_)(const vector<int>&,const NumericMatrix&,const int)");
+        signatures.insert("VectorXd(*mrwr_s)(const MatrixXd&,const SpMat&,const double,const double,const int,const bool)");
+        signatures.insert("List(*neighbors_)(const vector<int>&,const MatrixXd&,const int&)");
+        signatures.insert("List(*neighbors_s)(const vector<int>&,const MSpMat&,const int&)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -282,10 +464,15 @@ RcppExport SEXP _diffusr_RcppExport_registerCCallable() {
     R_RegisterCCallable("diffusr", "_diffusr_heat_diffusion_", (DL_FUNC)_diffusr_heat_diffusion__try);
     R_RegisterCCallable("diffusr", "_diffusr_stoch_col_norm_", (DL_FUNC)_diffusr_stoch_col_norm__try);
     R_RegisterCCallable("diffusr", "_diffusr_laplacian_", (DL_FUNC)_diffusr_laplacian__try);
+    R_RegisterCCallable("diffusr", "_diffusr_laplacian_s", (DL_FUNC)_diffusr_laplacian_s_try);
     R_RegisterCCallable("diffusr", "_diffusr_node_degrees_", (DL_FUNC)_diffusr_node_degrees__try);
+    R_RegisterCCallable("diffusr", "_diffusr_node_degrees_s", (DL_FUNC)_diffusr_node_degrees_s_try);
     R_RegisterCCallable("diffusr", "_diffusr_hub_normalize_", (DL_FUNC)_diffusr_hub_normalize__try);
+    R_RegisterCCallable("diffusr", "_diffusr_hub_normalize_s", (DL_FUNC)_diffusr_hub_normalize_s_try);
     R_RegisterCCallable("diffusr", "_diffusr_mrwr_", (DL_FUNC)_diffusr_mrwr__try);
+    R_RegisterCCallable("diffusr", "_diffusr_mrwr_s", (DL_FUNC)_diffusr_mrwr_s_try);
     R_RegisterCCallable("diffusr", "_diffusr_neighbors_", (DL_FUNC)_diffusr_neighbors__try);
+    R_RegisterCCallable("diffusr", "_diffusr_neighbors_s", (DL_FUNC)_diffusr_neighbors_s_try);
     R_RegisterCCallable("diffusr", "_diffusr_RcppExport_validate", (DL_FUNC)_diffusr_RcppExport_validate);
     return R_NilValue;
 }
@@ -294,10 +481,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_diffusr_heat_diffusion_", (DL_FUNC) &_diffusr_heat_diffusion_, 3},
     {"_diffusr_stoch_col_norm_", (DL_FUNC) &_diffusr_stoch_col_norm_, 1},
     {"_diffusr_laplacian_", (DL_FUNC) &_diffusr_laplacian_, 1},
+    {"_diffusr_laplacian_s", (DL_FUNC) &_diffusr_laplacian_s, 1},
     {"_diffusr_node_degrees_", (DL_FUNC) &_diffusr_node_degrees_, 1},
+    {"_diffusr_node_degrees_s", (DL_FUNC) &_diffusr_node_degrees_s, 1},
     {"_diffusr_hub_normalize_", (DL_FUNC) &_diffusr_hub_normalize_, 1},
+    {"_diffusr_hub_normalize_s", (DL_FUNC) &_diffusr_hub_normalize_s, 1},
     {"_diffusr_mrwr_", (DL_FUNC) &_diffusr_mrwr_, 6},
+    {"_diffusr_mrwr_s", (DL_FUNC) &_diffusr_mrwr_s, 6},
     {"_diffusr_neighbors_", (DL_FUNC) &_diffusr_neighbors_, 3},
+    {"_diffusr_neighbors_s", (DL_FUNC) &_diffusr_neighbors_s, 3},
     {"_diffusr_RcppExport_registerCCallable", (DL_FUNC) &_diffusr_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

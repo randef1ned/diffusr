@@ -46,4 +46,5 @@ using Eigen::SparseMatrix;
 typedef Eigen::MappedSparseMatrix<double> MSpMat;
 typedef Eigen::Map<MatrixXd> MMatrixXd;
 typedef Eigen::SparseMatrix<double> SpMat;
+typedef Eigen::SparseMatrix<int> SpMati;
 typedef Eigen::Map<VectorXd> MVectorXd;

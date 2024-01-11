@@ -54,4 +54,10 @@
 #' @useDynLib diffusr
 #'
 #' @importFrom Rcpp sourceCpp
+#' @importFrom checkmate assert_vector
+#' @importFrom sparseMatrixStats colAnyNAs
 NULL
+
+.onAttach <- function(libname, pkgname) {
+  assert_vector(colAnyNAs(matrix(0)))
+}

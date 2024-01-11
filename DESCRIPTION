@@ -25,7 +25,8 @@ Imports:
     igraph,
     methods,
     checkmate,
-    matrixStats
+    matrixStats,
+    sparseMatrixStats
 Suggests:
     knitr,
     rmarkdown,

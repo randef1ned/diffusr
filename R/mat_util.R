@@ -27,11 +27,10 @@
 #' @return  returns the normalized matrix/vector
 #'
 #' @importFrom checkmate assert check_matrix test_numeric test_atomic_vector
-#' @importFrom matrixStats colSums2
 #'
 #' @examples
-#'  W <- matrix(abs(rnorm(10000)), 100, 100)
-#'  stoch.W <- normalize.stochastic(W)
+#' W <- matrix(abs(rnorm(10000)), 100, 100)
+#' stoch.W <- normalize.stochastic(W)
 normalize.stochastic <- function(obj, ...) {
   is_matrix <- FALSE
   if (test_numeric(obj, lower = 0, finite = TRUE, any.missing = FALSE,
@@ -53,13 +52,17 @@ normalize.stochastic <- function(obj, ...) {
     is_matrix <- TRUE
   }
   if (is_matrix) {
-    sums <- colSums2(obj)
+    sums <- colSums3(obj, !is_matrix)
     if (!all(.equals.double(sums, 1, .001))) {
       message("normalizing column vectors!")
       empt_col_val <- 1.0 / ncol(obj)
 
       obj <- obj / sums[col(obj)]
-      obj[, which(sums < empt_col_val)] <- 0.00001
+      # check if need wipe zeros
+      zeros <- which(sums < empt_col_val)
+      if (length(zeros)) {
+        obj[, zeros] <- 0.00001
+      }
     }
   } else {
     obj <- obj / sum(obj)
@@ -79,12 +82,12 @@ normalize.stochastic <- function(obj, ...) {
 #' @importFrom Rcpp sourceCpp
 #'
 #' @examples
-#'  W <- matrix(abs(rnorm(10000)), 100, 100)
-#'  lapl.W <- normalize.laplacian(W)
+#' W <- matrix(abs(rnorm(10000)), 100, 100)
+#' lapl.W <- normalize.laplacian(W)
 normalize.laplacian <- function(obj, ...) {
   if (is.dgCMatrix(obj)) {
     assert_dgCMatrix(obj)
-    # TODO: sparse matrix
+    return(laplacian_s(obj))
   } else {
     assert(
       check_matrix(obj, mode = "numeric", nrows = ncol(obj), ncols = nrow(obj),
@@ -117,7 +120,7 @@ hub.correction <- function(obj) {
   n_elements <- nrow(obj)
   if (is.dgCMatrix(obj)) {
     assert_dgCMatrix(obj)
-    # TODO: sparse matrix
+    return(hub_normalize_s(obj))
   } else {
     assert(
       check_matrix(obj, mode = "numeric", min.rows = 3, nrows = n_elements,
@@ -136,4 +139,17 @@ hub.correction <- function(obj) {
   adj   <- graph_from_adjacency_matrix(obj, mode = "directed", weighted = TRUE)
   comps <- components(adj)
   ifelse(length(comps$csize) == 1, TRUE, FALSE)
+}
+
+#' @noRd
+#' @importFrom matrixStats colSums2
+colSums3 <- function(mat, is.sparse = NULL) {
+  if (is.null(is.sparse)) {
+    is.sparse <- is.dgCMatrix(mat)
+  }
+  if (is.sparse) {
+    sums <- sparseMatrixStats::colSums2(mat)
+  } else {
+    sums <- colSums2(mat)
+  }
 }

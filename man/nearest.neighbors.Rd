@@ -7,11 +7,14 @@
 nearest.neighbors(nodes, graph, k = 1L, ...)
 }
 \arguments{
-\item{nodes}{a \code{n}-dimensional integer vector of node indexes (1-based) for which the algorithm is applied iteratively}
+\item{nodes}{a \eqn{n}-dimensional integer vector of node indexes (1-based)
+for which the algorithm is applied iteratively}
 
-\item{graph}{an (\code{n x n})-dimensional numeric non-negative adjacence matrix representing the graph}
+\item{graph}{an (\eqn{n \times n})-dimensional numeric non-negative adjacence
+matrix representing the graph}
 
-\item{k}{the depth of the nearest neighbor search, e.g. the depth of the graph traversal}
+\item{k}{the depth of the nearest neighbor search, e.g. the depth of the
+graph traversal}
 
 \item{...}{additional parameters}
 }
@@ -19,10 +22,10 @@ nearest.neighbors(nodes, graph, k = 1L, ...)
 returns the kNN nodes as list of integer vectors of node indexes
 }
 \description{
-For every node in a set of nodes the graph gets traversed along
-the node's shortest paths to its neighbors. Nearest neighbors are added
-until a maximum depth of \code{k} is reached. For settings where there are more
-than \code{k} neighbors having the same distance, all neighbors are returned.
+For every node in a set of nodes the graph gets traversed along the node's
+shortest paths to its neighbors. Nearest neighbors are added until a maximum
+depth of \code{k} is reached. For settings where there are more than \code{k}
+neighbors having the same distance, all neighbors are returned.
 }
 \examples{
 # count of nodes

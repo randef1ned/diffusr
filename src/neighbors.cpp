@@ -35,26 +35,6 @@ bool equals(const double val, const double cmp, const double delta)
     return val <= cmp + delta && val >= cmp - delta;
 }
 
-priority_queue<pair<int, double>,
-               vector<pair<int, double>>,
-               distance_comparator>
-  init_queue(const NumericMatrix& W, const int source)
-{
-    priority_queue<pair<int, double>,
-                   vector<pair<int, double>>,
-                   distance_comparator> queue;
-
-    for (int i = 0; i < W.cols(); ++i)
-    {
-        if (i != source && W(source, i) > 0)
-        {
-            queue.push(make_pair(i, W(source, i)));
-        }
-    }
-
-    return queue;
-}
-
 vector<pair<int, double>> current_neighbors(
   priority_queue<pair<int, double>,
                  vector<pair<int, double>>,
@@ -102,64 +82,61 @@ void add_neighbor_to_queue(
     }
 }
 
+template <typename T>
 set<int> nearest_neighbor_dijkstra_(
                                 const int            source,
                                 const int            max_depth,
-                                const NumericMatrix& W)
-{
+                                const T   &W) {
+    size_t n = W.cols();
     // use a priority queue to quickly extract nearest neighbors
-    priority_queue<pair<int, double>,
-                   vector<pair<int, double>>,
-                   distance_comparator>
-      queue = init_queue(W, source);
+    // init queue
+    priority_queue<pair<int, double>, vector<pair<int, double>>, distance_comparator> queue;
+
+    for (int i = 0; i < n; ++i) {
+        if (i != source && W.coeff(source, i) > 0) {
+            queue.push(make_pair(i, W.coeff(source, i)));
+        }
+    }
+
     // boolean vector if nodes have already been visited in the BFS
-    vector<uint8_t> visited(W.rows(), false);
+    vector<uint8_t> visited(n, false);
 
     // traverse graph until a certain depth is reached
     int r = 1;
     set<int> nei;
-    do
-    {
+    do {
         checkUserInterrupt();
         // list of the nearest neighbors
         vector<pair<int, double>> curr_nei =
           current_neighbors(queue, visited);
         // iterate over current nearest neighbors and add them to the results
         // list
-        for (const pair<int, double>& cn : curr_nei)
-        {
-            if (visited[cn.first] && cn.first == source)
-            {
+        for (const pair<int, double>& cn : curr_nei) {
+            if (visited[cn.first] && cn.first == source) {
                 continue;
-            }
-            else
-            {
+            } else {
                 visited[cn.first] = true;
             }
             // add as neighbor with index + 1, cause neighbors are indexe
             // starting from 1 in R
             nei.insert(cn.first + 1);
             // add current node to priority queue
-            add_neighbor_to_queue(queue, W, cn);
+            // add_eighbor_to_queue
+            for (int i = 0; i < n; ++i) {
+                if (i != cn.first && W.coeff(cn.first, i) > 0) {
+                    queue.push(make_pair(i, W.coeff(cn.first, i)));
+                }
+            }
         }
     } while (r++ < max_depth && queue.size());
     return nei;
 }
 
-//' Find the closest neighbors of a group of nodes in a graph.
-//'
-//' @noRd
-//' @param node_idxs  the staring distribution
-//' @param W  adjacency matrix
-//' @param k  the depth of the nearest neighbor search
-//' @return  returns a list of nearest neighbors for every node idxs given in
-//'  <emph>node_idxs</emph>
-// [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::export]]
-List neighbors_(const vector<int> &node_idxs,
-                const NumericMatrix& W,
-                const int            k)
-{
+
+template <typename T>
+List neighbors_t(const vector<int> &node_idxs,
+                const T            &W,
+                const int          &k) {
     // number of idxs given
     size_t len = node_idxs.size();
     // neighbors for every node
@@ -178,4 +155,32 @@ List neighbors_(const vector<int> &node_idxs,
     }
 
     return wrap(neighbors);
+}
+
+//' Find the closest neighbors of a group of nodes in a graph.
+//'
+//' @noRd
+//' @param node_idxs  the staring distribution
+//' @param W  adjacency matrix
+//' @param k  the depth of the nearest neighbor search
+//' @return  returns a list of nearest neighbors for every node idxs given in
+//'  <emph>node_idxs</emph>
+// [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::export]]
+List neighbors_(const vector<int> &node_idxs, const MatrixXd &W, const int &k) {
+    return neighbors_t(node_idxs, W, k);
+}
+
+//' Find the closest neighbors of a group of nodes in a graph.
+//'
+//' @noRd
+//' @param node_idxs  the staring distribution
+//' @param W  adjacency matrix
+//' @param k  the depth of the nearest neighbor search
+//' @return  returns a list of nearest neighbors for every node idxs given in
+//'  <emph>node_idxs</emph>
+// [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::export]]
+List neighbors_s(const vector<int> &node_idxs, const MSpMat &W, const int &k) {
+    return neighbors_t(node_idxs, W, k);
 }

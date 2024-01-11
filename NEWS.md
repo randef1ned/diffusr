@@ -42,6 +42,6 @@
 	* Codecov
 * Initial submission to CRAN
 
-# Author
+## Author
 
 * Simon Dirmeier <a href="mailto:simon.dirmeier@gmx.de">simon.dirmeier@gmx.de</a>

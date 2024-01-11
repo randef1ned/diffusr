@@ -33,7 +33,7 @@ h0 <- as.vector(rmultinom(1, 1, prob=rep(.2, n)))
 # adjacency matrix (either normalized or not)
 graph <- matrix(abs(rnorm(n*n)), n, n)
 # computation of stationary distribution
-ht <- heat.diffusion(h0, graph)
+heat <- heat.diffusion(h0, graph)
 }
 \references{
 \url{https://en.wikipedia.org/wiki/Laplacian_matrix} \cr
