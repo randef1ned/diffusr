@@ -1,4 +1,4 @@
-#' Check if a matrix is `dgCMatrix` class
+#' Check if a matrix is \code{dgCMatrix} class
 #'
 #' @param mat The matrix to check
 #'

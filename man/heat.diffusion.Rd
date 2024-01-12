@@ -7,11 +7,13 @@
 heat.diffusion(h0, graph, t = 0.5, ...)
 }
 \arguments{
-\item{h0}{an \code{n x p}-dimensional numeric non-negative vector/matrix
-of starting temperatures}
+\item{h0}{an \eqn{n \times p}-dimensional numeric non-negative
+\code{\link[base]{matrix}} (or
+\code{\link[Matrix:dgCMatrix-class]{dgCMatrix}},
+\code{\link[base]{vector}}) of starting temperatures}
 
-\item{graph}{an (\code{n x n})-dimensional numeric non-negative adjacence
-matrix representing the graph}
+\item{graph}{an (\eqn{n \times n})-dimensional numeric non-negative
+adjacence matrix representing the graph}
 
 \item{t}{time point when heat is measured}
 
@@ -22,8 +24,8 @@ returns the heat on every node as numeric vector
 }
 \description{
 An amount of starting heat gets distribution using the
-Laplacian matrix of a graph. Every iteration (or time interval) \code{t}
-heat streams from the starting nodes into surrounding nodes.
+  Laplacian matrix of a graph. Every iteration (or time interval) \eqn{t}
+  heat streams from the starting nodes into surrounding nodes.
 }
 \examples{
 # count of nodes
@@ -36,6 +38,7 @@ graph <- matrix(abs(rnorm(n*n)), n, n)
 heat <- heat.diffusion(h0, graph)
 }
 \references{
-\url{https://en.wikipedia.org/wiki/Laplacian_matrix} \cr
+\url{https://en.wikipedia.org/wiki/Laplacian_matrix}
+
 \url{https://en.wikipedia.org/wiki/Heat_equation}
 }

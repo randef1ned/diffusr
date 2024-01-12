@@ -21,21 +21,21 @@
 #' Graph diffusion using a Markov random walk
 #'
 #' @description
-#' A Markov Random Walk takes an inital distribution \code{p0}
+#' A Markov Random Walk takes an inital distribution \eqn{p_0}
 #' and calculates the stationary distribution of that.
-#' The diffusion process is regulated by a restart probability \code{r} which
+#' The diffusion process is regulated by a restart probability \eqn{r} which
 #' controls how often the MRW jumps back to the initial values.
 #'
-#' @param p0  an \code{n x p}-dimensional numeric non-negative vector/matrix
+#' @param p0  an \eqn{n \times p}-dimensional numeric non-negative vector/matrix
 #'  representing the starting distribution of the Markov chain
 #'  (does not need to sum to one).
 #'
-#' @param graph  an (\code{n x n})-dimensional numeric non-negative adjacence
+#' @param graph  an \eqn{n \times p}-dimensional numeric non-negative adjacence
 #'   \code{\link[base]{matrix}} (or
 #'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}) representing the graph
 #'
-#' @param r  a scalar between (0, 1). restart probability if a Markov random
-#' walk with restart is desired
+#' @param r  a scalar between \eqn{(0, 1)}. restart probability if a Markov
+#'   random walk with restart is desired
 #'
 #' @param thresh  threshold for breaking the iterative computation of the
 #'  stationary distribution. If the absolute difference of the distribution at
@@ -53,7 +53,8 @@
 #' @param correct.for.hubs if \code{TRUE} multiplies a correction factor to the
 #'  nodes, such that the random walk gets not biased to nodes with high
 #'  degree. In that case the original input matrix will be normalized as:
-#'  \deqn{ P(j | i) =  1 /degree(i) *  min(1, degree(j)/degree(j))}
+#'  \deqn{ P(j | i) = \dfrac{1}{\text{degree}(i)} \times
+#'    \min \left(1, \dfrac{\text{degree}(j)}{\text{degree}(i)}\right)}
 #'  \emph{Note that this will not consider edge weights.}
 #'
 #' @param allow.ergodic Allow multiple components in a graph.
@@ -62,9 +63,9 @@
 #'
 #' @return  returns a list with the following elements
 #'  \itemize{
-#'   \item p.inf  the stationary distribution as numeric vector
-#'   \item transition.matrix the column normalized transition matrix used for
-#'         the random walk
+#'   \item \code{p.inf}  the stationary distribution as numeric vector
+#'   \item \code{transition.matrix} the column normalized transition matrix used
+#'         for the random walk
 #'  }
 #'
 #' @references

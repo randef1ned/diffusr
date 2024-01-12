@@ -25,9 +25,6 @@
 #' @author Simon Dirmeier \email{simon.dirmeier@@gmx.de}
 #' @name diffusr-package
 #'
-#' @docType package
-#' @keywords package
-#'
 #' @references
 #'
 #' Tong, H., Faloutsos, C., & Pan, J. Y. (2006),

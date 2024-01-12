@@ -20,13 +20,15 @@ Before installation, we recommended you install Intel oneAPI Math Kernel Library
 Windows users can download oneMKL from [Intel's website](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl-download.html) and install it in the default directory. The default directory is: `C:\Program Files (x86)\Intel\oneAPI`.
 
 Debian users can download oneMKL using apt in the Debian non-free repo:
-```{bash}
+
+``` bash
 # Install oneMKL version 2020.4.304-4
 sudo apt install intel-mkl-full
 ```
 
 Or using the Intel repo:
-```{bash}
+
+``` bash
 # Set up the repository and signed the entry
 wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
 | gpg --dearmor | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
@@ -38,7 +40,8 @@ sudo apt install intel-oneapi-mkl
 ```
 
 Fedora users can download oneMKL by using dnf:
-```{bash}
+
+``` bash
 # Create dnf repository file
 tee > /tmp/oneAPI.repo << EOF
 [oneAPI]
@@ -57,12 +60,14 @@ sudo dnf install intel-oneapi-mkl
 ## Installation
 
 Install `diffusr` using:
-```{r}
+
+``` r
 install.packages("diffusr")
 ```
 
 Alternatively use the latest version from github:
-```{r}
+
+``` r
 devtools::install_github("randef1ned/diffusr", build_vignettes = TRUE)
 ```
 

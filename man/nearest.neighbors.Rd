@@ -12,8 +12,8 @@ for which the algorithm is applied iteratively}
 
 \item{graph}{an (\eqn{n \times n})-dimensional numeric non-negative adjacence
 \code{\link[base]{matrix}} (or
-\code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}, \link[base]{vector})
-representing the graph}
+\code{\link[Matrix:dgCMatrix-class]{dgCMatrix}},
+\code{\link[base]{vector}}) representing the graph}
 
 \item{k}{the depth of the nearest neighbor search, e.g. the depth of the
 graph traversal}
@@ -26,7 +26,7 @@ returns the kNN nodes as list of integer vectors of node indexes
 \description{
 For every node in a set of nodes the graph gets traversed along the node's
 shortest paths to its neighbors. Nearest neighbors are added until a maximum
-depth of \code{k} is reached. For settings where there are more than \code{k}
+depth of \eqn{k} is reached. For settings where there are more than \eqn{k}
 neighbors having the same distance, all neighbors are returned.
 }
 \examples{

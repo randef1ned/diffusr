@@ -23,11 +23,10 @@
 #' @export
 #'
 #' @param obj  \code{\link[base]{matrix}} (or
-#'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}, \link[base]{vector}) that
-#'   is stochstically normalized
+#'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}},
+#'   \code{\link[base]{vector}}) that is stochstically normalized
 #' @param ...  additional params
-#' @return  returns the normalized \code{\link[base]{matrix}} (or
-#'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}, \link[base]{vector})
+#' @return  returns the normalized matrix/vector)
 #'
 #' @importFrom checkmate assert check_matrix test_numeric test_atomic_vector
 #'

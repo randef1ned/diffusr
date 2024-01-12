@@ -2,7 +2,7 @@
 % Please edit documentation in R/is.dgCMatrix.R
 \name{is.dgCMatrix}
 \alias{is.dgCMatrix}
-\title{Check if a matrix is `dgCMatrix` class}
+\title{Check if a matrix is \code{dgCMatrix} class}
 \usage{
 is.dgCMatrix(mat)
 }
@@ -13,5 +13,5 @@ is.dgCMatrix(mat)
 A boolean variable
 }
 \description{
-Check if a matrix is `dgCMatrix` class
+Check if a matrix is \code{dgCMatrix} class
 }
