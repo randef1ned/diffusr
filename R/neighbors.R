@@ -32,7 +32,9 @@
 #'   for which the algorithm is applied iteratively
 #'
 #' @param graph an (\eqn{n \times n})-dimensional numeric non-negative adjacence
-#'   matrix representing the graph
+#'   \code{\link[base]{matrix}} (or
+#'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}, \link[base]{vector})
+#'   representing the graph
 #'
 #' @param k the depth of the nearest neighbor search, e.g. the depth of the
 #'   graph traversal

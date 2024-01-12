@@ -29,8 +29,7 @@
 //' @return  returns the normalized matrix
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-MatrixXd stoch_col_norm_(const MatrixXd& W)
-{
+MatrixXd stoch_col_norm_(const MatrixXd& W) {
     MatrixXd res(W.rows(), W.cols());
     VectorXd colsums      = W.colwise().sum();
     const double    empt_col_val = 1.0 / W.cols();
@@ -51,6 +50,8 @@ template <typename T> MatrixXd compute_laplacian(const T &W, const ArrayXd rowsu
 
 template <> MatrixXd compute_laplacian(const MatrixXd &W, const ArrayXd rowsums, const size_t P) {
     ArrayXd rowsums_m = rowsums.replicate(1, P).array().sqrt().inverse();
+    // remove 1/0 = Inf
+    rowsums_m = (rowsums_m.isInf()).select(0, rowsums_m);
     MatrixXd res = - W.array() * (rowsums_m.transpose() * rowsums_m) * W.array().cast<bool>().cast<double>();
     return res;
 }
@@ -61,23 +62,18 @@ template <> MatrixXd compute_laplacian(const SpMat &W, const ArrayXd rowsums, co
     return res;
 }
 
-template <typename T> MatrixXd laplacian_t(const T& W)
-{
+template <typename T> MatrixXd laplacian_t(const T& W) {
     const size_t       P = W.rows();
     //MatrixXd res(P, P);
     // Equivalent with: VectorXd rowsums = W.rowwise().sum();
     ArrayXd rowsums = (W * VectorXd::Ones(P)).array();
     
     // for diagnoals
-    ArrayXd W_diags = 1 - W.diagonal().array() / rowsums;
+    ArrayXd W_diags = 1 - W.diagonal().array() / (rowsums == 0).select(1, rowsums);
     W_diags *= (rowsums != 0.0).cast<double>();
     
     // for others
-    //ArrayXd rowsums_m = rowsums.replicate(1, P).array().sqrt().inverse();
-    //MatrixXd res = - W.array() * (rowsums_m.transpose() * rowsums_m) * W.array().cast<bool>().cast<double>();
     MatrixXd res = compute_laplacian(W, rowsums, P);
-    //res.noalias() = rowsums_m.transpose().cwiseProduct(rowsums_m).cwiseProduct(-W).cwiseProduct(W.cast<bool>().cast<double>());
-    // Rcout << - W * rowsums_m.transpose().cwiseProduct(rowsums_m) << endl << endl;
     res.diagonal().array() = W_diags;
     return res;
 }

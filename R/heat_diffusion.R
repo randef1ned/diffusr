@@ -75,7 +75,6 @@ heat.diffusion <- function(h0, graph, t = 0.5, ...) {
   diag(graph) <- 0
   if (is.dgCMatrix(graph)) {
     assert_dgCMatrix(graph)
-    # TODO: sparse matrix
   } else {
     assert(
       test_matrix(graph, mode = "numeric", nrows = n_elements,
@@ -84,7 +83,7 @@ heat.diffusion <- function(h0, graph, t = 0.5, ...) {
       any(graph >= 0),
       combine = "and"
     )
-    heat <- heat_diffusion_(h0, laplacian_(graph), t)
   }
+  heat <- heat_diffusion_(h0, laplacian_(graph), t)
   return(heat)
 }

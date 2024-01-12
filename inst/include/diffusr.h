@@ -1,9 +1,3 @@
-#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
-#define WINDOWS 1
-#else
-#define WINDOWS 0
-#endif
-
 #ifdef INTEL_MKL_VERSION 
 #define EIGEN_USE_MKL_ALL
 #endif

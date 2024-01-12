@@ -22,9 +22,12 @@
 #'
 #' @export
 #'
-#' @param obj  matrix/vector that is stochstically normalized
+#' @param obj  \code{\link[base]{matrix}} (or
+#'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}, \link[base]{vector}) that
+#'   is stochstically normalized
 #' @param ...  additional params
-#' @return  returns the normalized matrix/vector
+#' @return  returns the normalized \code{\link[base]{matrix}} (or
+#'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}, \link[base]{vector})
 #'
 #' @importFrom checkmate assert check_matrix test_numeric test_atomic_vector
 #'
@@ -74,7 +77,9 @@ normalize.stochastic <- function(obj, ...) {
 #'
 #' @export
 #'
-#' @param obj  matrix for which the Laplacian is calculated
+#' @param obj  \code{\link[base]{matrix}} (or
+#'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}) for which the Laplacian is
+#'   calculated
 #' @param ...  additional params
 #' @return  returns the Laplacian
 #'
@@ -104,9 +109,12 @@ normalize.laplacian <- function(obj, ...) {
 #'
 #' @export
 #'
-#' @param obj  matrix for which hubs are corrected
+#' @param obj  \code{\link[base]{matrix}} (or
+#'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}) for which hubs
+#'   are corrected
 #'
-#' @return  returns the matrix with hub correction
+#' @return  returns the \code{\link[base]{matrix}} (or
+#'   \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}) with hub correction
 #'
 #' @useDynLib diffusr
 #'

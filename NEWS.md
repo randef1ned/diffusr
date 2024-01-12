@@ -1,3 +1,8 @@
+# diffusr v0.2.1
+
+* Allow sparse matrix as input
+* Lint the code
+
 # diffusr v0.2.0
 
 * Reorganized the code

@@ -7,12 +7,15 @@
 normalize.stochastic(obj, ...)
 }
 \arguments{
-\item{obj}{matrix/vector that is stochstically normalized}
+\item{obj}{\code{\link[base]{matrix}} (or
+\code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}, \link[base]{vector}) that
+is stochstically normalized}
 
 \item{...}{additional params}
 }
 \value{
-returns the normalized matrix/vector
+returns the normalized \code{\link[base]{matrix}} (or
+  \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}, \link[base]{vector})
 }
 \description{
 Create a stochastically normalized matrix/vector

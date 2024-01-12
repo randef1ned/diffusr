@@ -7,7 +7,9 @@
 normalize.laplacian(obj, ...)
 }
 \arguments{
-\item{obj}{matrix for which the Laplacian is calculated}
+\item{obj}{\code{\link[base]{matrix}} (or
+\code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}) for which the Laplacian is
+calculated}
 
 \item{...}{additional params}
 }

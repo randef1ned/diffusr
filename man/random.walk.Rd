@@ -22,7 +22,8 @@ representing the starting distribution of the Markov chain
 (does not need to sum to one).}
 
 \item{graph}{an (\code{n x n})-dimensional numeric non-negative adjacence
-matrix representing the graph}
+\code{\link[base]{matrix}} (or
+\code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}) representing the graph}
 
 \item{r}{a scalar between (0, 1). restart probability if a Markov random
 walk with restart is desired}

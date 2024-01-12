@@ -61,8 +61,7 @@ VectorXd mrwr_t(const MatrixXd& p0,
 
         int iter = 0;
         pt = p0;
-        do
-        {
+        do {
             if (iter % 25 == 0)
                 Rcpp::checkUserInterrupt();
             pold = pt;

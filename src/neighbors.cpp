@@ -22,16 +22,13 @@
 
 #include "../inst/include/diffusr.h"
 
-struct distance_comparator
-{
-    bool operator()(pair<int, double>& lhs, pair<int, double>& rhs)
-    {
+struct distance_comparator {
+    bool operator()(pair<int, double>& lhs, pair<int, double>& rhs) {
         return lhs.second < rhs.second;
     }
 };
 
-bool equals(const double val, const double cmp, const double delta)
-{
+bool equals(const double val, const double cmp, const double delta) {
     return val <= cmp + delta && val >= cmp - delta;
 }
 
@@ -39,8 +36,7 @@ vector<pair<int, double>> current_neighbors(
   priority_queue<pair<int, double>,
                  vector<pair<int, double>>,
                  distance_comparator>& queue,
-  vector<uint8_t>& visited)
-{
+  vector<uint8_t>& visited) {
 
     // get the nearest neighbor
     pair<int, double> cn = queue.top();
@@ -49,14 +45,12 @@ vector<pair<int, double>> current_neighbors(
 
     vector<pair<int, double>> curr_nei;
     // add the node itself to the list, since we iterate over the list later
-    if (!visited[cn.first])
-    {
+    if (!visited[cn.first]) {
         curr_nei.push_back(cn);
     }
 
     // add neighbors that are as close as the first neighbor `cn`
-    while (queue.size() && equals(queue.top().second, cn.second, .001))
-    {
+    while (queue.size() && equals(queue.top().second, cn.second, .001)) {
         pair<int, double> nn = queue.top();
         if (!visited[nn.first])
             curr_nei.push_back(nn);
@@ -71,8 +65,7 @@ void add_neighbor_to_queue(
                  vector<pair<int, double>>,
                  distance_comparator>& queue,
   const NumericMatrix& W,
-  const pair<int, double>& cn)
-{
+  const pair<int, double>& cn) {
     for (int i = 0; i < W.cols(); ++i)
     {
         if (i != cn.first && W(cn.first, i) > 0)
@@ -145,8 +138,7 @@ List neighbors_t(const vector<int> &node_idxs,
     // parallelize node search
     // Fucking R bug: you can never have R objects within the parallel sections
     // #pragma omp parallel for
-    for (uint32_t i = 0; i < len; ++i)
-    {
+    for (uint32_t i = 0; i < len; ++i) {
         // substract one, cause R was one-based
         int node_idx = node_idxs[i] - 1;
         // neighbors of current node

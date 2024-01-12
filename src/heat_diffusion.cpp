@@ -34,17 +34,14 @@
 // [[Rcpp::export]]
 MatrixXd heat_diffusion_(const MatrixXd& v0,
                          const MatrixXd& W,
-                         const double    t)
-{
+                         const double    t) {
     SelfAdjointEigenSolver<MatrixXd> es(W);
     MatrixXd                         V  = es.eigenvectors();
     VectorXd                         D  = es.eigenvalues();
     MatrixXd                         co = V.transpose() * v0;
     // solution to the heat equation at time t
-    for (int i = 0; i < co.rows(); ++i)
-    {
-        for (int j = 0; j < co.cols(); ++j)
-        {
+    for (int i = 0; i < co.rows(); ++i) {
+        for (int j = 0; j < co.cols(); ++j) {
             if (j % 25 == 0)
                 Rcpp::checkUserInterrupt();
             co(i, j) *= std::exp(-D(i) * t);

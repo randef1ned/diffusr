@@ -7,10 +7,13 @@
 hub.correction(obj)
 }
 \arguments{
-\item{obj}{matrix for which hubs are corrected}
+\item{obj}{\code{\link[base]{matrix}} (or
+\code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}) for which hubs
+are corrected}
 }
 \value{
-returns the matrix with hub correction
+returns the \code{\link[base]{matrix}} (or
+  \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}}) with hub correction
 }
 \description{
 Correct for hubs in an adjacency matrix
