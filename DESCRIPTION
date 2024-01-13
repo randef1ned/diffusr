@@ -3,10 +3,9 @@ Type: Package
 Title: Network Diffusion Algorithms
 Version: 0.2.1
 Date: 2018-04-20
-Authors@R: c(person("Simon", "Dirmeier",
+Authors@R: person("Simon", "Dirmeier",
                   email = "simon.dirmeier@gmx.de",
-                  role = c("aut")),
-             person("Yinchun", "Su", email = "me@yinchun.su", role = c("ctb", "cre")))
+                  role = c("aut", "cre"))
 Maintainer: Simon Dirmeier <simon.dirmeier@gmx.de>
 Description: Implementation of network diffusion algorithms such as
   heat diffusion or Markov random walks. Network diffusion algorithms generally
@@ -18,7 +17,7 @@ Description: Implementation of network diffusion algorithms such as
 URL: https://github.com/randef1ned/diffusr
 BugReports: https://github.com/randef1ned/diffusr/issues
 License: GPL (>=3)
-Depends: R (>= 3.4)
+Depends: R (>= 4.0)
 LazyData: TRUE
 LinkingTo: Rcpp, RcppEigen
 biocViews: sparseMatrixStats

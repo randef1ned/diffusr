@@ -7,7 +7,6 @@ src/tests/netreg_benchmarks*
 src/tests/netreg_tests*
 src/test
 src/netReg.dSYM/*
-src/Makevars
 src/stamp-h1
 src/**/*.o
 src/**/*.a

@@ -159,4 +159,5 @@ colSums3 <- function(mat, is.sparse = NULL) {
   } else {
     sums <- colSums2(mat)
   }
+  return(sums)
 }

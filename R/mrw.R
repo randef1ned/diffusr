@@ -54,7 +54,7 @@
 #'  nodes, such that the random walk gets not biased to nodes with high
 #'  degree. In that case the original input matrix will be normalized as:
 #'  \deqn{ P(j | i) = \dfrac{1}{\text{degree}(i)} \times
-#'    \min \left(1, \dfrac{\text{degree}(j)}{\text{degree}(i)}\right)}
+#'    \min \left(1, \dfrac{\text{degree}(i)}{\text{degree}(j)}\right)}
 #'  \emph{Note that this will not consider edge weights.}
 #'
 #' @param allow.ergodic Allow multiple components in a graph.
