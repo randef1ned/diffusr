@@ -130,7 +130,7 @@ starting distribution:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">p0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      [,1] [,2] [,3] [,4] [,5]</span></span>
-<span><span class="co">## [1,]    0    0    1    0    0</span></span></code></pre>
+<span><span class="co">## [1,]    0    0    0    0    1</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">pt</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      p.inf     transition.matrix</span></span>
@@ -141,15 +141,15 @@ starting distribution:</p>
 <span>   <span class="va">pt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/random.walk.html">random.walk</a></span><span class="op">(</span><span class="va">p0</span>, <span class="va">graph</span><span class="op">)</span></span>
 <span>   <span class="va">pt</span></span></code></pre></div>
 <pre><code><span><span class="co">## $p.inf</span></span>
-<span><span class="co">## [1] 0.15823668 0.03600200 0.53516106 0.08434603 0.18625423</span></span>
+<span><span class="co">## [1] 0.14254159 0.11347180 0.06874839 0.12056554 0.55467267</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $transition.matrix</span></span>
-<span><span class="co">##            [,1]       [,2]       [,3]      [,4]       [,5]</span></span>
-<span><span class="co">## [1,] 0.00000000 0.19124204 0.33108063 0.1893905 0.62496989</span></span>
-<span><span class="co">## [2,] 0.17353599 0.00000000 0.03292018 0.1664322 0.06924708</span></span>
-<span><span class="co">## [3,] 0.07901072 0.25696425 0.00000000 0.4445560 0.05955006</span></span>
-<span><span class="co">## [4,] 0.66292871 0.09281857 0.02727808 0.0000000 0.24623297</span></span>
-<span><span class="co">## [5,] 0.08452458 0.45897515 0.60872111 0.1996213 0.00000000</span></span></code></pre>
+<span><span class="co">##            [,1]       [,2]        [,3]        [,4]      [,5]</span></span>
+<span><span class="co">## [1,] 0.00000000 0.27874857 0.006399332 0.015076331 0.4528753</span></span>
+<span><span class="co">## [2,] 0.06674785 0.00000000 0.008989360 0.561236552 0.2689155</span></span>
+<span><span class="co">## [3,] 0.08275131 0.05586213 0.000000000 0.420766454 0.1237506</span></span>
+<span><span class="co">## [4,] 0.52249611 0.29829941 0.685367238 0.000000000 0.1544586</span></span>
+<span><span class="co">## [5,] 0.32800473 0.36708989 0.299244069 0.002920663 0.0000000</span></span></code></pre>
 <p>In the later case, a random walk is done over all columns of
 <code>p0</code> separately.</p>
 <div class="section level4">
@@ -164,15 +164,15 @@ faster than the iterative version.</p>
 <code class="sourceCode R"><span>   <span class="va">pt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/random.walk.html">random.walk</a></span><span class="op">(</span><span class="va">p0</span>, <span class="va">graph</span>, do.analytical<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span>   <span class="va">pt</span></span></code></pre></div>
 <pre><code><span><span class="co">## $p.inf</span></span>
-<span><span class="co">## [1] 0.15822380 0.03600547 0.53517084 0.08434661 0.18625329</span></span>
+<span><span class="co">## [1] 0.14254237 0.11347719 0.06875152 0.12056067 0.55466825</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $transition.matrix</span></span>
-<span><span class="co">##            [,1]       [,2]       [,3]      [,4]       [,5]</span></span>
-<span><span class="co">## [1,] 0.00000000 0.19124204 0.33108063 0.1893905 0.62496989</span></span>
-<span><span class="co">## [2,] 0.17353599 0.00000000 0.03292018 0.1664322 0.06924708</span></span>
-<span><span class="co">## [3,] 0.07901072 0.25696425 0.00000000 0.4445560 0.05955006</span></span>
-<span><span class="co">## [4,] 0.66292871 0.09281857 0.02727808 0.0000000 0.24623297</span></span>
-<span><span class="co">## [5,] 0.08452458 0.45897515 0.60872111 0.1996213 0.00000000</span></span></code></pre>
+<span><span class="co">##            [,1]       [,2]        [,3]        [,4]      [,5]</span></span>
+<span><span class="co">## [1,] 0.00000000 0.27874857 0.006399332 0.015076331 0.4528753</span></span>
+<span><span class="co">## [2,] 0.06674785 0.00000000 0.008989360 0.561236552 0.2689155</span></span>
+<span><span class="co">## [3,] 0.08275131 0.05586213 0.000000000 0.420766454 0.1237506</span></span>
+<span><span class="co">## [4,] 0.52249611 0.29829941 0.685367238 0.000000000 0.1544586</span></span>
+<span><span class="co">## [5,] 0.32800473 0.36708989 0.299244069 0.002920663 0.0000000</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -226,22 +226,22 @@ this:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">h0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      [,1] [,2] [,3] [,4] [,5]</span></span>
-<span><span class="co">## [1,]    0    1    0    0    0</span></span></code></pre>
+<span><span class="co">## [1,]    0    0    0    1    0</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">ht</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##            [,1]     [,2]      [,3]       [,4]       [,5]</span></span>
-<span><span class="co">## [1,] 0.08968551 0.665752 0.2588559 0.05992756 0.08349615</span></span></code></pre>
+<pre><code><span><span class="co">##           [,1]       [,2]       [,3]      [,4]       [,5]</span></span>
+<span><span class="co">## [1,] 0.1093149 0.06323093 0.07643613 0.6224157 0.02010177</span></span></code></pre>
 <p>As before, <code>p0</code> can also be a matrix:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>   <span class="va">h0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">h0</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span>, nrow<span class="op">=</span><span class="va">n</span><span class="op">)</span></span>
 <span>   <span class="va">ht</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/heat.diffusion.html">heat.diffusion</a></span><span class="op">(</span><span class="va">h0</span>, <span class="va">graph</span><span class="op">)</span></span>
 <span>   <span class="va">ht</span></span></code></pre></div>
 <pre><code><span><span class="co">##            [,1]      [,2]      [,3]      [,4]      [,5]</span></span>
-<span><span class="co">## [1,] 0.08968551 0.1204662 0.5931786 0.2827625 0.8400491</span></span>
-<span><span class="co">## [2,] 0.66575197 0.3414202 0.9133666 0.9214872 0.7314094</span></span>
-<span><span class="co">## [3,] 0.25885591 0.2138076 0.9311935 0.9255724 0.6017860</span></span>
-<span><span class="co">## [4,] 0.05992756 0.4079095 0.4212098 0.8019934 0.8762287</span></span>
-<span><span class="co">## [5,] 0.08349615 0.2456982 0.8274726 0.5681795 0.7986266</span></span></code></pre>
+<span><span class="co">## [1,] 0.10931495 0.6380647 0.6828742 0.2792684 0.7283391</span></span>
+<span><span class="co">## [2,] 0.06323093 0.4224313 0.6443288 0.4156627 0.2915234</span></span>
+<span><span class="co">## [3,] 0.07643613 0.3234764 0.5038881 0.4129662 0.6290378</span></span>
+<span><span class="co">## [4,] 0.62241573 0.3985255 0.5551638 0.5128568 0.5322090</span></span>
+<span><span class="co">## [5,] 0.02010177 0.4469769 0.6970196 0.4035154 0.7450455</span></span></code></pre>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -252,7 +252,7 @@ this:</p>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Simon Dirmeier, Yinchun Su.</p>
+<p>Developed by Simon Dirmeier.</p>
 </div>
 
 <div class="pkgdown-footer-right">

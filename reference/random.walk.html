@@ -119,7 +119,7 @@ computed solving the analytical solution or rather iteratively</p></dd>
 nodes, such that the random walk gets not biased to nodes with high
 degree. In that case the original input matrix will be normalized as:
 $$ P(j | i) = \dfrac{1}{\text{degree}(i)} \times
-  \min \left(1, \dfrac{\text{degree}(j)}{\text{degree}(i)}\right)$$
+  \min \left(1, \dfrac{\text{degree}(i)}{\text{degree}(j)}\right)$$
 <em>Note that this will not consider edge weights.</em></p></dd>
 
 
@@ -169,7 +169,7 @@ Walking the interactome for prioritization of candidate disease genes.
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Simon Dirmeier, Yinchun Su.</p>
+  <p></p><p>Developed by Simon Dirmeier.</p>
 </div>
 
 <div class="pkgdown-footer-right">
