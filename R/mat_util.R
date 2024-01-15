@@ -35,6 +35,7 @@
 #' stoch.W <- normalize.stochastic(W)
 normalize.stochastic <- function(obj, ...) {
   is_matrix <- FALSE
+  is_sparse <- FALSE
   if (test_numeric(obj, lower = 0, finite = TRUE, any.missing = FALSE,
                    all.missing = FALSE, null.ok = FALSE) &&
       test_atomic_vector(obj)) {
@@ -43,7 +44,7 @@ normalize.stochastic <- function(obj, ...) {
     }
   } else if (is.dgCMatrix(obj)) {
     assert_dgCMatrix(obj)
-    is_matrix <- TRUE
+    is_matrix <- is_sparse <- TRUE
   } else {
     assert(
       check_matrix(obj, mode = "numeric", any.missing = FALSE,
@@ -54,7 +55,7 @@ normalize.stochastic <- function(obj, ...) {
     is_matrix <- TRUE
   }
   if (is_matrix) {
-    sums <- colSums3(obj, !is_matrix)
+    sums <- colSums3(obj, is_sparse)
     if (!all(.equals.double(sums, 1, .001))) {
       message("normalizing column vectors!")
       empt_col_val <- 1.0 / ncol(obj)
@@ -157,7 +158,7 @@ colSums3 <- function(mat, is.sparse = NULL) {
   if (is.sparse) {
     sums <- sparseMatrixStats::colSums2(mat)
   } else {
-    sums <- colSums2(mat)
+    sums <- matrixStats::colSums2(mat)
   }
   return(sums)
 }
