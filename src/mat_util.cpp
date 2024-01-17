@@ -22,6 +22,30 @@
 
 #include "../inst/include/diffusr.h"
 
+template <typename T>
+T stoch_col_norm_t(const T& W) {
+    size_t n = W.rows();
+    T res(n, n);
+    VectorXd colsums      = W.transpose() * VectorXd::Ones(n);
+    //res.reserve((colsums * n).sum());
+    const double    empt_col_val = 1.0 / n;
+    const double    zero_col     = 0.00001;
+    
+    for (unsigned int i = 0; i < n; ++i) {
+        if (colsums[i] <= zero_col) {
+            for (size_t j = 0; j < n; ++j) {
+                res.coeffRef(j, i) = empt_col_val;
+            }
+        } else {
+            for (size_t j = 0; j < n; ++j) {
+                res.coeffRef(j, i) = W.coeff(j, i) / colsums(i);
+            }
+        }
+    }
+
+    return res;
+}
+
 //' Column normalize a matrix, so that it is stochastic.
 //'
 //' @noRd
@@ -29,20 +53,20 @@
 //' @return  returns the normalized matrix
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::export]]
-MatrixXd stoch_col_norm_(const MatrixXd& W) {
-    MatrixXd res(W.rows(), W.cols());
-    VectorXd colsums      = W.colwise().sum();
-    const double    empt_col_val = 1.0 / W.cols();
-    const double    zero_col     = 0.00001;
-    #pragma omp parallel for
-    for (unsigned int i = 0; i < W.cols(); ++i)
-    {
-        if (colsums[i] <= zero_col)
-            res.col(i).fill(empt_col_val);
-        else
-            res.col(i) = W.col(i) / colsums(i);
-    }
+MatrixXd stoch_col_norm_(const MatrixXd &W) {
+    return stoch_col_norm_t(W);
+}
 
+//' Column normalize a matrix, so that it is stochastic.
+//'
+//' @noRd
+//' @param W  the adjacency matrix to be normalized
+//' @return  returns the normalized matrix
+// [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::export]]
+SpMat stoch_col_norm_s(const SpMat &W) {
+    SpMat res = stoch_col_norm_t(W);
+    res.makeCompressed();
     return res;
 }
 
@@ -141,10 +165,11 @@ MatrixXd hub_normalize_t(const temp &W) {
     
     #pragma omp parallel for
     for (unsigned int i = 0; i < n; ++i) {
+        double mh;
         for (unsigned int j = 0; j < n; ++j) {
             if (W.coeff(i, j) != 0) {
                 // Equivlant with: double mh = fc(node_degrees[i] / node_degrees[j]);
-                double mh = node_degrees[i] / node_degrees[j];
+                mh = node_degrees[i] / node_degrees[j];
                 res.coeffRef(i, j) = min(1.0, mh) / node_degrees[i];
             }
         }

@@ -1,3 +1,8 @@
+# diffusr v0.2.2
+
+* Bug fix
+* Performance improvement for sparse matrix
+
 # diffusr v0.2.1
 
 * Allow sparse matrix as input

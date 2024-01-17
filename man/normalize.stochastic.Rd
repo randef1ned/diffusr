@@ -4,12 +4,14 @@
 \alias{normalize.stochastic}
 \title{Create a stochastically normalized matrix/vector}
 \usage{
-normalize.stochastic(obj, ...)
+normalize.stochastic(obj, no_r = NULL, ...)
 }
 \arguments{
 \item{obj}{\code{\link[base]{matrix}} (or
 \code{\link[Matrix:dgCMatrix-class]{dgCMatrix}},
 \code{\link[base]{vector}}) that is stochstically normalized}
+
+\item{no_r}{Do not use R for normalization}
 
 \item{...}{additional params}
 }

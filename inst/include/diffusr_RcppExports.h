@@ -67,6 +67,27 @@ namespace diffusr {
         return Rcpp::as<MatrixXd >(rcpp_result_gen);
     }
 
+    inline SpMat stoch_col_norm_s(const SpMat& W) {
+        typedef SEXP(*Ptr_stoch_col_norm_s)(SEXP);
+        static Ptr_stoch_col_norm_s p_stoch_col_norm_s = NULL;
+        if (p_stoch_col_norm_s == NULL) {
+            validateSignature("SpMat(*stoch_col_norm_s)(const SpMat&)");
+            p_stoch_col_norm_s = (Ptr_stoch_col_norm_s)R_GetCCallable("diffusr", "_diffusr_stoch_col_norm_s");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_stoch_col_norm_s(Shield<SEXP>(Rcpp::wrap(W)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SpMat >(rcpp_result_gen);
+    }
+
     inline MatrixXd laplacian_(const MatrixXd& W) {
         typedef SEXP(*Ptr_laplacian_)(SEXP);
         static Ptr_laplacian_ p_laplacian_ = NULL;

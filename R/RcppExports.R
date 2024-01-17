@@ -9,6 +9,10 @@ stoch_col_norm_ <- function(W) {
     .Call('_diffusr_stoch_col_norm_', PACKAGE = 'diffusr', W)
 }
 
+stoch_col_norm_s <- function(W) {
+    .Call('_diffusr_stoch_col_norm_s', PACKAGE = 'diffusr', W)
+}
+
 laplacian_ <- function(W) {
     .Call('_diffusr_laplacian_', PACKAGE = 'diffusr', W)
 }

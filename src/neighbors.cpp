@@ -66,10 +66,8 @@ void add_neighbor_to_queue(
                  distance_comparator>& queue,
   const NumericMatrix& W,
   const pair<int, double>& cn) {
-    for (int i = 0; i < W.cols(); ++i)
-    {
-        if (i != cn.first && W(cn.first, i) > 0)
-        {
+    for (int i = 0; i < W.cols(); ++i) {
+        if (i != cn.first && W(cn.first, i) > 0) {
             queue.push(make_pair(i, W(cn.first, i)));
         }
     }

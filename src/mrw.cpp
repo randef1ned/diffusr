@@ -29,7 +29,9 @@ template<typename type> VectorXd mrwr_o(const MatrixXd& p0, const type &W, const
 
 template<> SpMat inverse_matrix(const SpMat &mat, const SpMat &I) {
     SparseLU<SpMat> luDecomposition(mat);
-    return luDecomposition.solve(I);
+    SpMat ret = luDecomposition.solve(I);
+    ret.makeCompressed();
+    return ret;
 }
 template<> MatrixXd inverse_matrix(const MatrixXd &mat, const MatrixXd &I) {
     FullPivLU<MatrixXd> luDecomposition(mat);
@@ -54,6 +56,7 @@ VectorXd mrwr_t(const MatrixXd& p0,
         temp T = I - (1 - r) * W;
         // then inverse the matrix T
         temp T_inv = inverse_matrix(T, I);
+        I.resize(0, 0);
 
         pt = T_inv * r * p0;
     } else {

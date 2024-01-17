@@ -80,8 +80,9 @@
 #'
 #' @useDynLib diffusr
 #'
-#' @importFrom checkmate assert_number assert_int assert_logical test_numeric
-#'                       assert test_matrix check_numeric
+#' @importFrom checkmate assert_number assert_int assert_logical assert_numeric
+#'                       assert test_matrix check_numeric test_atomic_vector
+#' @importFrom methods as
 #' @importFrom Rcpp sourceCpp
 #'
 #' @examples
@@ -112,7 +113,7 @@ random.walk <- function(p0, graph, r = 0.5, niter = 1e4, thresh = 1e-4,
   n_elements <- nrow(graph)
   if (is.dgCMatrix(graph)) {
     assert_dgCMatrix(graph)
-    sparse <- TRUE
+    sparse <- allow.ergodic <- TRUE
   } else {
     assert(
       test_matrix(graph, mode = "numeric", min.rows = 3, nrows = n_elements,
@@ -125,8 +126,9 @@ random.walk <- function(p0, graph, r = 0.5, niter = 1e4, thresh = 1e-4,
   }
 
   # convert p0 if p0 is vector
-  if (test_numeric(p0, lower = 0, len = n_elements, finite = TRUE,
-                   any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)) {
+  if (test_atomic_vector(p0)) {
+    assert_numeric(p0, lower = 0, len = n_elements, finite = TRUE,
+                   any.missing = FALSE, all.missing = FALSE, null.ok = FALSE)
     p0 <- as.matrix(p0)
   } else {
     assert(
@@ -150,6 +152,9 @@ random.walk <- function(p0, graph, r = 0.5, niter = 1e4, thresh = 1e-4,
 
   if (sparse) {
     # sparse matrix
+    if (!is.dgCMatrix(stoch.graph)) {
+      stoch.graph <- as(stoch.graph, "CsparseMatrix")
+    }
     l <- mrwr_s(normalize.stochastic(p0),
                 stoch.graph, r, thresh, niter, do.analytical)
   } else {

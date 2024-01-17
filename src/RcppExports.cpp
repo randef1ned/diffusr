@@ -84,6 +84,40 @@ RcppExport SEXP _diffusr_stoch_col_norm_(SEXP WSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// stoch_col_norm_s
+SpMat stoch_col_norm_s(const SpMat& W);
+static SEXP _diffusr_stoch_col_norm_s_try(SEXP WSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const SpMat& >::type W(WSEXP);
+    rcpp_result_gen = Rcpp::wrap(stoch_col_norm_s(W));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _diffusr_stoch_col_norm_s(SEXP WSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_diffusr_stoch_col_norm_s_try(WSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // laplacian_
 MatrixXd laplacian_(const MatrixXd& W);
 static SEXP _diffusr_laplacian__try(SEXP WSEXP) {
@@ -445,6 +479,7 @@ static int _diffusr_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("MatrixXd(*heat_diffusion_)(const MatrixXd&,const MatrixXd&,const double)");
         signatures.insert("MatrixXd(*stoch_col_norm_)(const MatrixXd&)");
+        signatures.insert("SpMat(*stoch_col_norm_s)(const SpMat&)");
         signatures.insert("MatrixXd(*laplacian_)(const MatrixXd&)");
         signatures.insert("MatrixXd(*laplacian_s)(const SpMat&)");
         signatures.insert("VectorXd(*node_degrees_)(const MatrixXd&)");
@@ -463,6 +498,7 @@ static int _diffusr_RcppExport_validate(const char* sig) {
 RcppExport SEXP _diffusr_RcppExport_registerCCallable() { 
     R_RegisterCCallable("diffusr", "_diffusr_heat_diffusion_", (DL_FUNC)_diffusr_heat_diffusion__try);
     R_RegisterCCallable("diffusr", "_diffusr_stoch_col_norm_", (DL_FUNC)_diffusr_stoch_col_norm__try);
+    R_RegisterCCallable("diffusr", "_diffusr_stoch_col_norm_s", (DL_FUNC)_diffusr_stoch_col_norm_s_try);
     R_RegisterCCallable("diffusr", "_diffusr_laplacian_", (DL_FUNC)_diffusr_laplacian__try);
     R_RegisterCCallable("diffusr", "_diffusr_laplacian_s", (DL_FUNC)_diffusr_laplacian_s_try);
     R_RegisterCCallable("diffusr", "_diffusr_node_degrees_", (DL_FUNC)_diffusr_node_degrees__try);
@@ -480,6 +516,7 @@ RcppExport SEXP _diffusr_RcppExport_registerCCallable() {
 static const R_CallMethodDef CallEntries[] = {
     {"_diffusr_heat_diffusion_", (DL_FUNC) &_diffusr_heat_diffusion_, 3},
     {"_diffusr_stoch_col_norm_", (DL_FUNC) &_diffusr_stoch_col_norm_, 1},
+    {"_diffusr_stoch_col_norm_s", (DL_FUNC) &_diffusr_stoch_col_norm_s, 1},
     {"_diffusr_laplacian_", (DL_FUNC) &_diffusr_laplacian_, 1},
     {"_diffusr_laplacian_s", (DL_FUNC) &_diffusr_laplacian_s, 1},
     {"_diffusr_node_degrees_", (DL_FUNC) &_diffusr_node_degrees_, 1},
