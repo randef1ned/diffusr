@@ -52,4 +52,3 @@
 #'
 #' @importFrom Rcpp sourceCpp
 NULL
-
