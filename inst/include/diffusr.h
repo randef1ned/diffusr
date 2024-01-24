@@ -38,7 +38,13 @@ using Eigen::ArrayXd;
 using Eigen::SparseMatrix;
 
 typedef Eigen::MappedSparseMatrix<double> MSpMat;
-typedef Eigen::Map<MatrixXd> MMatrixXd;
+// typedef Eigen::Map<MatrixXd> MMatrixXd;
 typedef Eigen::SparseMatrix<double> SpMat;
-typedef Eigen::SparseMatrix<int> SpMati;
 typedef Eigen::Map<VectorXd> MVectorXd;
+
+#ifndef RCPP_diffusr_H_GEN_
+#define RCPP_diffusr_H_GEN_
+
+#include "diffusr_RcppExports.h"
+
+#endif // RCPP_diffusr_H_GEN_
