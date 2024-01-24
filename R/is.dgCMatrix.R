@@ -18,6 +18,8 @@ is.dgCMatrix <- function(mat) {
 #'
 #' @export
 #'
+#' @importFrom sparseMatrixStats colAnyNAs
+#'
 assert_dgCMatrix <- function(adj_matrix, non_negative = TRUE) {
   if (adj_matrix@Dim[1] != adj_matrix@Dim[2]) {
     stop(paste("Error: Assertion on 'adj_matrix' failed: Must have exactly",
@@ -29,5 +31,7 @@ assert_dgCMatrix <- function(adj_matrix, non_negative = TRUE) {
   } else if (non_negative && any(adj_matrix@x < 0)) {
     stop(paste("Error: Assertion on 'adj_matrix' failed: Element",
                seq_along(adj_matrix@x)[adj_matrix@x < 0][1], "is not >= 0."))
+  } else if (colAnyNAs(adj_matrix)) {
+    stop("Error: NAs in the matrix.")
   }
 }
