@@ -53,28 +53,25 @@ repo_gpgcheck=1
 gpgkey=https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
 EOF
 sudo mv /tmp/oneAPI.repo /etc/yum.repos.d
-# Install the latest oneMKL (version 2024.0)
-sudo dnf install intel-oneapi-mkl
+# Install the latest oneMKL (version 2025.0)
+sudo dnf install intel-oneapi-mkl intel-oneapi-mkl-devel intel-oneapi-mkl-core
 ```
 
 ## Installation
 
-Install `diffusr` using:
+Install `diffusr` from GitHub:
 
 ``` r
-install.packages("diffusr")
-```
-
-Alternatively use the latest version from github:
-
-``` r
-devtools::install_github("randef1ned/diffusr", build_vignettes = TRUE)
+if ("devtools" %in% installed.packages()[, "Package"])
+  install.packages("devtools")
+remotes::install_github("randef1ned/diffusr", upgrade = "always", build_vignettes = TRUE, build_manual = TRUE)
 ```
 
 ## Usage
 
 Load the package using `library(diffusr)`. We provide a vignette for the package that can be called using: `vignette("diffusr")`.
 Basically that is all you have to know.
+
 
 ## Author
 
