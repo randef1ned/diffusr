@@ -1,57 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://diffusr.yinchun.su/404.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/VERSIONS.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/articles/diffusr.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/index.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/assert_dgCMatrix.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/diffusr-package.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/heat.diffusion.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/hub.correction.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/is.dgCMatrix.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/nearest.neighbors.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/normalize.laplacian.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/normalize.stochastic.html</loc>
-  </url>
-  <url>
-    <loc>https://diffusr.yinchun.su/reference/random.walk.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://diffusr.yinchun.su/404.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/LICENSE-text.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/VERSIONS.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/articles/diffusr.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/articles/index.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/authors.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/index.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/news/index.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/assert_dgCMatrix.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/diffusr-package.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/heat.diffusion.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/hub.correction.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/index.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/is.dgCMatrix.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/nearest.neighbors.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/normalize.laplacian.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/normalize.stochastic.html</loc></url>
+<url><loc>https://diffusr.yinchun.su/reference/random.walk.html</loc></url>
 </urlset>
+
